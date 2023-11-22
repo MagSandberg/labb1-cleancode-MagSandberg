@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Shared.Dtos;
+using Shared;
 
 namespace Server.DataAccess;
 

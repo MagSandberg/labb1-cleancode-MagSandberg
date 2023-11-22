@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 using Server.DataAccess;
-using Shared.Dtos;
+using Shared;
 
 namespace Server.Controllers;
 
@@ -30,6 +30,7 @@ public class MainController : ControllerBase
         return Ok(await _shopContext.Customers.FirstOrDefaultAsync(c => c.Name.Equals(email)));
     }
 
+    //Change dto to include email or remove @ check
     [HttpPost("/customers/register")]
     public async Task<IActionResult> RegisterUser(Customer customer)
     {

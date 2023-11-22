@@ -1,4 +1,4 @@
-﻿namespace Shared.Dtos;
+﻿namespace Shared;
 
 public class Product
 {
