@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Server.Controllers;
@@ -23,16 +24,15 @@ namespace SOLID_DEMO_Tests
 
             //Act
 
-            var result = sut.RegisterUser(new Customer("Magnus", "123")).Result;
+            var result = sut.RegisterUser(new Customer("mag@email.com", "123")).Result;
             
             //Assert
 
-            Assert.Equal("Magnus", "123");
-
+            Assert.IsType<OkResult>(result);
         }
 
         [Fact]
-        public void MainController_GetCustomers_Return_ListOfCustomers()
+        public void MainController_GetCustomers_Return_ListOfCustomersObject()
         {
             //Arrange
 
@@ -45,7 +45,86 @@ namespace SOLID_DEMO_Tests
             //Assert
 
             Assert.IsType<OkObjectResult>(result);
+        }
 
+        [Fact]
+        public void MainController_GetCustomer_Return_CustomerObject()
+        {
+            //Arrange
+
+            var sut = _mainController;
+
+            //Act
+
+            var result = sut.GetCustomer("mag@email.com").Result;
+
+            //Assert
+
+            Assert.IsType<OkObjectResult>(result);
+        }
+
+        [Fact]
+        public void MainController_LoginCustomer_Return_Ok()
+        {
+            //Arrange
+
+            var sut = _mainController;
+
+            //Act
+
+            var result = sut.LoginCustomer("mag@email.com", "123").Result;
+
+            //Assert
+
+            Assert.IsType<OkResult>(result);
+        }
+
+        [Fact]
+        public void MainController_LoginCustomer_Return_BadRequest()
+        {
+            //Arrange
+
+            var sut = _mainController;
+
+            //Act
+
+            var result = sut.LoginCustomer("mag@email.com", "123456").Result;
+
+            //Assert
+
+            Assert.IsType<BadRequestResult>(result);
+        }
+
+        [Fact]
+        public void MainController_DeleteCustomer_Return_BadRequest()
+        {
+            //Arrange
+
+            var sut = _mainController;
+
+            //Act
+
+            var result = sut.DeleteCustomer(999).Result;
+
+            //Assert
+
+            Assert.IsType<BadRequestResult>(result);
+        }
+
+        [Fact]
+        public void MainController_DeleteCustomer_Return_Ok()
+        {
+            //Arrange
+
+            var sut = _mainController;
+
+            //Act
+
+            var result = sut.DeleteCustomer(51).Result;
+
+            //Assert
+
+            Assert.IsType<OkResult>(result);
         }
     }
 }

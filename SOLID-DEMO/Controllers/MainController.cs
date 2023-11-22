@@ -24,13 +24,14 @@ public class MainController : ControllerBase
         return Ok(await _shopContext.Customers.ToListAsync());
     }
 
+    //Fix this to use email
     [HttpGet("/customers/{email}")]
     public async Task<IActionResult> GetCustomer(string email)
     {
         return Ok(await _shopContext.Customers.FirstOrDefaultAsync(c => c.Name.Equals(email)));
     }
 
-    //Change dto to include email or remove @ check
+    //Change model to include email or remove @ check
     [HttpPost("/customers/register")]
     public async Task<IActionResult> RegisterUser(Customer customer)
     {
@@ -41,6 +42,7 @@ public class MainController : ControllerBase
         return Ok();
     }
 
+    //Fix this to use email
     [HttpPost("/customers/login")]
     public async Task<IActionResult> LoginCustomer(string email, string password)
     {
