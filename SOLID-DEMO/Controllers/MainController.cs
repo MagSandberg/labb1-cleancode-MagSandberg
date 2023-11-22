@@ -1,9 +1,9 @@
 ﻿using System.Collections.Immutable;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Shared;
 using System.ComponentModel.DataAnnotations;
 using Server.DataAccess;
+using Shared.Dtos;
 
 namespace Server.Controllers;
 
