@@ -71,6 +71,7 @@ public class MainController : ControllerBase
         return Ok(await _shopContext.Products.ToListAsync());
     }
 
+    //This need work
     [HttpGet("/products/{id}")]
     public async Task<IActionResult> GetProduct(int id)
     {
