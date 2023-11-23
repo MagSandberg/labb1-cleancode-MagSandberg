@@ -16,7 +16,7 @@ namespace SOLID_DEMO_Tests
         public static MainController _mainController = new MainController(_shopContext);
 
         [Fact]
-        public void MainController_RegisterUser_Return_Ok()
+        public async Task MainController_RegisterUser_Return_Ok()
         {
             //Arrange
 
@@ -24,7 +24,7 @@ namespace SOLID_DEMO_Tests
 
             //Act
 
-            var result = sut.RegisterUser(new Customer("mag@email.com", "123")).Result;
+            var result = await sut.RegisterUser(new Customer("mag@email.com", "123"));
             
             //Assert
 
@@ -32,7 +32,7 @@ namespace SOLID_DEMO_Tests
         }
 
         [Fact]
-        public void MainController_GetCustomers_Return_ListOfCustomersObject()
+        public async Task MainController_GetCustomers_Return_ListOfCustomersObject()
         {
             //Arrange
 
@@ -40,7 +40,7 @@ namespace SOLID_DEMO_Tests
 
             //Act
 
-            var result = sut.GetCustomers().Result;
+            var result = await sut.GetCustomers();
 
             //Assert
 
@@ -48,7 +48,7 @@ namespace SOLID_DEMO_Tests
         }
 
         [Fact]
-        public void MainController_GetCustomer_Return_CustomerObject()
+        public async Task MainController_GetCustomer_Return_CustomerObject()
         {
             //Arrange
 
@@ -56,7 +56,7 @@ namespace SOLID_DEMO_Tests
 
             //Act
 
-            var result = sut.GetCustomer("mag@email.com").Result;
+            var result = await sut.GetCustomer("mag@email.com");
 
             //Assert
 
@@ -64,7 +64,7 @@ namespace SOLID_DEMO_Tests
         }
 
         [Fact]
-        public void MainController_LoginCustomer_Return_Ok()
+        public async Task MainController_LoginCustomer_Return_Ok()
         {
             //Arrange
 
@@ -72,7 +72,7 @@ namespace SOLID_DEMO_Tests
 
             //Act
 
-            var result = sut.LoginCustomer("mag@email.com", "123").Result;
+            var result = await sut.LoginCustomer("mag@email.com", "123");
 
             //Assert
 
@@ -80,7 +80,7 @@ namespace SOLID_DEMO_Tests
         }
 
         [Fact]
-        public void MainController_LoginCustomer_Return_BadRequest()
+        public async Task MainController_LoginCustomer_Return_BadRequest()
         {
             //Arrange
 
@@ -88,7 +88,7 @@ namespace SOLID_DEMO_Tests
 
             //Act
 
-            var result = sut.LoginCustomer("mag@email.com", "123456").Result;
+            var result = await sut.LoginCustomer("mag@email.com", "123456");
 
             //Assert
 
@@ -96,7 +96,7 @@ namespace SOLID_DEMO_Tests
         }
 
         [Fact]
-        public void MainController_DeleteCustomer_Return_BadRequest()
+        public async Task MainController_DeleteCustomer_Return_BadRequest()
         {
             //Arrange
 
@@ -104,7 +104,7 @@ namespace SOLID_DEMO_Tests
 
             //Act
 
-            var result = sut.DeleteCustomer(999).Result;
+            var result = await sut.DeleteCustomer(999);
 
             //Assert
 
@@ -112,15 +112,16 @@ namespace SOLID_DEMO_Tests
         }
 
         [Fact]
-        public void MainController_DeleteCustomer_Return_Ok()
+        public async Task MainController_DeleteCustomer_Return_Ok()
         {
             //Arrange
 
             var sut = _mainController;
+            var newCustomer = sut.RegisterUser(new Customer("mag@email.com", "123"));
 
             //Act
 
-            var result = sut.DeleteCustomer(51).Result;
+            var result = await sut.DeleteCustomer(newCustomer.Id);
 
             //Assert
 
