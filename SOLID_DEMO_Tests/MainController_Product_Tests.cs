@@ -1,29 +1,23 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Server.Controllers;
-using Server.DataAccess;
 using Shared;
+using SOLID_DEMO_Tests.Test_Services;
 
 namespace SOLID_DEMO_Tests;
 
 public class MainController_Product_Tests
 {
-    public static DbContextOptions _options = new DbContextOptionsBuilder<ShopContext>()
-        .UseInMemoryDatabase(databaseName: "InMemory_CustomersDb")
-        .Options;
-    public static ShopContext _shopContext = new ShopContext(_options);
-    public static MainController _mainController = new MainController(_shopContext);
+    private static readonly MainController_InMemoryDb_Service InMemoryDbService = new();
 
     [Fact]
     public async Task MainController_AddProduct_Return_Ok()
     {
         //Arrange
 
-        var sut = _mainController;
+        var sut = await InMemoryDbService.ProductInMemoryDb();
 
         //Act
 
-        var result = await sut.AddProduct(new Product { Name = "Mouse", Description = "New Product" });
+        var result = await sut.AddProduct(new Product { Name = "Orange", Description = "Orange Description" });
 
         //Assert
 
@@ -35,12 +29,11 @@ public class MainController_Product_Tests
     {
         //Arrange
 
-        var sut = _mainController;
+        var sut = await InMemoryDbService.ProductInMemoryDb();
 
         //Act
 
-        var newProduct = await sut.AddProduct(new Product { Name = "Mouse", Description = "Test" });
-        var result = await sut.AddProduct(new Product{ Name = "Mouse" , Description = "Test" });
+        var result = await sut.AddProduct(new Product { Name = "Apple", Description = "New Apple Description" });
 
         //Assert
 
@@ -52,7 +45,7 @@ public class MainController_Product_Tests
     {
         //Arrange
 
-        var sut = _mainController;
+        var sut = await InMemoryDbService.ProductInMemoryDb();
 
         //Act
 
@@ -68,7 +61,7 @@ public class MainController_Product_Tests
     {
         //Arrange
 
-        var sut = _mainController;
+        var sut = await InMemoryDbService.ProductInMemoryDb();
 
         //Act
 

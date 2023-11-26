@@ -49,4 +49,18 @@ public class MainController_InMemoryDb_Service
 
         return mainController;
     }
+
+    public async Task<MainController> ProductInMemoryDb()
+    {
+        var mainController = _mainController;
+
+        var prodOne = new Product { Name = "Apple", Description = "Apple Description" };
+        var prodTwo = new Product { Name = "Banana", Description = "Banana Description" };
+        var prodThree = new Product { Name = "Pear", Description = "Pear Description" };
+
+        await mainController._shopContext.Products.AddRangeAsync(prodOne, prodTwo, prodThree);
+        await mainController._shopContext.SaveChangesAsync();
+
+        return mainController;
+    }
 }
