@@ -1,6 +1,4 @@
 using Microsoft.AspNetCore.Mvc;
-using Server.Controllers;
-using Server.DataAccess;
 using Shared;
 using SOLID_DEMO_Tests.Test_Services;
 
