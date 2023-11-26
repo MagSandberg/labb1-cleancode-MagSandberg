@@ -1,25 +1,21 @@
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Server.Controllers;
 using Server.DataAccess;
 using Shared;
+using SOLID_DEMO_Tests.Test_Services;
 
 namespace SOLID_DEMO_Tests
 {
-    public class MainController_Customer_Tests
+    public class MainControllerCustomerTests
     {
-        public static DbContextOptions _options = new DbContextOptionsBuilder<ShopContext>()
-            .UseInMemoryDatabase(databaseName: "InMemory_CustomersDb")
-            .Options;
-        public static ShopContext _shopContext = new ShopContext(_options);
-        public static MainController _mainController = new MainController(_shopContext);
+        private static readonly MainController_InMemoryDb_Service InMemoryDbService = new();
 
         [Fact]
         public async Task MainController_RegisterUser_Return_Ok()
         {
             //Arrange
 
-            var sut = _mainController;
+            var sut = await InMemoryDbService.CustomerInMemoryDb();
 
             //Act
 
@@ -35,7 +31,7 @@ namespace SOLID_DEMO_Tests
         {
             //Arrange
 
-            var sut = _mainController;
+            var sut = await InMemoryDbService.CustomerInMemoryDb();
 
             //Act
 
@@ -51,11 +47,11 @@ namespace SOLID_DEMO_Tests
         {
             //Arrange
 
-            var sut = _mainController;
+            var sut = await InMemoryDbService.CustomerInMemoryDb();
 
             //Act
 
-            var result = await sut.GetCustomer("mag@email.com");
+            var result = await sut.GetCustomer("hej@gimajl.com");
 
             //Assert
 
@@ -67,11 +63,11 @@ namespace SOLID_DEMO_Tests
         {
             //Arrange
 
-            var sut = _mainController;
+            var sut = await InMemoryDbService.CustomerInMemoryDb();
 
             //Act
 
-            var result = await sut.LoginCustomer("mag@email.com", "123");
+            var result = await sut.LoginCustomer("hej@gimajl.com", "123");
 
             //Assert
 
@@ -83,11 +79,11 @@ namespace SOLID_DEMO_Tests
         {
             //Arrange
 
-            var sut = _mainController;
+            var sut = await InMemoryDbService.CustomerInMemoryDb();
 
             //Act
 
-            var result = await sut.LoginCustomer("mag@email.com", "123456");
+            var result = await sut.LoginCustomer("hej@gimajl.com", "123456");
 
             //Assert
 
@@ -99,7 +95,7 @@ namespace SOLID_DEMO_Tests
         {
             //Arrange
 
-            var sut = _mainController;
+            var sut = await InMemoryDbService.CustomerInMemoryDb();
 
             //Act
 
@@ -115,7 +111,7 @@ namespace SOLID_DEMO_Tests
         {
             //Arrange
 
-            var sut = _mainController;
+            var sut = await InMemoryDbService.CustomerInMemoryDb();
             var newCustomer = sut.RegisterUser(new Customer("mag@email.com", "123"));
 
             //Act

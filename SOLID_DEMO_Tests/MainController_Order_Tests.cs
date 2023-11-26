@@ -11,7 +11,7 @@ public class MainController_Order_Tests
     public static async Task<ShopContext> InMemoryDatabase()
     {
         var options = new DbContextOptionsBuilder<ShopContext>()
-        .UseInMemoryDatabase(databaseName: "InMemory_CustomersDb")
+        .UseInMemoryDatabase(databaseName: "InMemory_OrderDb")
         .Options;
         var shopDbContext = new ShopContext(options);
 
