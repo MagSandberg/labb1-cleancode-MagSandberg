@@ -64,10 +64,11 @@ namespace SOLID_DEMO_Tests
             //Arrange
 
             var sut = await InMemoryDbService.CustomerInMemoryDb();
+            var customer = sut._shopContext.Customers.FirstOrDefault(c => c.Id == 1);
 
             //Act
 
-            var result = await sut.LoginCustomer("hej@gimajl.com", "123");
+            var result = await sut.LoginCustomer(customer.Name, customer.Password);
 
             //Assert
 
@@ -80,10 +81,12 @@ namespace SOLID_DEMO_Tests
             //Arrange
 
             var sut = await InMemoryDbService.CustomerInMemoryDb();
+            var customer = sut._shopContext.Customers.FirstOrDefault(c => c.Id == 1);
+            var wrongPassword = "235345346";
 
             //Act
 
-            var result = await sut.LoginCustomer("hej@gimajl.com", "123456");
+            var result = await sut.LoginCustomer(customer.Name, wrongPassword);
 
             //Assert
 

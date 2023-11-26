@@ -7,12 +7,13 @@ namespace SOLID_DEMO_Tests.Test_Services;
 
 public class MainController_InMemoryDb_Service
 {
-    public async Task<ShopContext> InMemoryDatabase()
+    public async Task<MainController> OrderInMemoryDatabase()
     {
         var options = new DbContextOptionsBuilder<ShopContext>()
-            .UseInMemoryDatabase(databaseName: "InMemory_OrdersDb")
+            .UseInMemoryDatabase(databaseName: "OrdersInMemoryDb")
             .Options;
         var shopDbContext = new ShopContext(options);
+        var mainController = new MainController(shopDbContext);
 
         var prodOne = new Product { Name = "Mouse", Description = "Mouse Description" };
         var prodTwo = new Product { Name = "Keyboard", Description = "Keyboard Description" };
@@ -30,13 +31,13 @@ public class MainController_InMemoryDb_Service
         await shopDbContext.Orders.AddAsync(orderOne);
         await shopDbContext.SaveChangesAsync();
 
-        return shopDbContext;
+        return mainController;
     }
 
     public async Task<MainController> CustomerInMemoryDb()
     {
         var options = new DbContextOptionsBuilder<ShopContext>()
-            .UseInMemoryDatabase(databaseName: "InMemory_CustomersDb")
+            .UseInMemoryDatabase(databaseName: "CustomersInMemoryDb")
             .Options;
         var shopDbContext = new ShopContext(options);
         var mainController = new MainController(shopDbContext);

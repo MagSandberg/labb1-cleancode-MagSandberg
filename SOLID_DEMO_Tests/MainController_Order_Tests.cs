@@ -1,54 +1,27 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Server.Controllers;
-using Server.DataAccess;
 using Shared;
+using SOLID_DEMO_Tests.Test_Services;
 
 namespace SOLID_DEMO_Tests;
 
 public class MainController_Order_Tests
 {
-    public static async Task<ShopContext> InMemoryDatabase()
-    {
-        var options = new DbContextOptionsBuilder<ShopContext>()
-        .UseInMemoryDatabase(databaseName: "InMemory_OrderDb")
-        .Options;
-        var shopDbContext = new ShopContext(options);
-
-        var prodOne = new Product { Name = "Mouse", Description = "Mouse Description" };
-        var prodTwo = new Product { Name = "Keyboard", Description = "Keyboard Description" };
-        var prodThree = new Product { Name = "Screen", Description = "Screen Description" };
-
-        var customerOne = new Customer("hej@gimajl.com", "123");
-
-        var orderOne = new Order
-        {
-            Products = new List<Product> { prodOne, prodTwo, prodThree },
-            Customer = customerOne,
-            ShippingDate = DateTime.Now.AddDays(3)
-        };
-
-        await shopDbContext.Orders.AddAsync(orderOne);
-
-        await shopDbContext.SaveChangesAsync();
-
-        return shopDbContext;
-    }
+    private static readonly MainController_InMemoryDb_Service InMemoryDbService = new();
 
     [Fact]
     public async Task MainController_GetAllOrders_Returns_Ok()
     {
         //Arrange
 
-        var sut = new MainController(await InMemoryDatabase());
+        var sut = await InMemoryDbService.OrderInMemoryDatabase();
 
         //Act
 
-        var orders = await sut.GetAllOrders();
+        var result = await sut.GetAllOrders();
 
         //Assert
 
-        Assert.IsType<OkObjectResult>(orders);
+        Assert.IsType<OkObjectResult>(result);
     }
 
     [Fact]
@@ -56,17 +29,16 @@ public class MainController_Order_Tests
     {
         //Arrange
 
-        var sut = new MainController(await InMemoryDatabase());
-
-        var customerId = InMemoryDatabase().Result.Customers.FirstOrDefaultAsync(c => c.Name == "hej@gimajl.com").Id;
+        var sut = await InMemoryDbService.OrderInMemoryDatabase();
+        var customerId = sut._shopContext.Customers.FirstOrDefault(c => c.Name == "hej@gimajl.com");
 
         //Act
 
-        var orders = await sut.GetOrdersForCustomer(customerId);
+        var result = await sut.GetOrdersForCustomer(customerId.Id);
 
         //Assert
 
-        Assert.IsType<OkObjectResult>(orders);
+        Assert.IsType<OkObjectResult>(result);
     }
 
     [Fact]
@@ -74,15 +46,15 @@ public class MainController_Order_Tests
     {
         //Arrange
 
-        var sut = new MainController(await InMemoryDatabase());
+        var sut = await InMemoryDbService.OrderInMemoryDatabase();
 
         //Act
 
-        var orders = await sut.GetOrdersForCustomer(99);
+        var result = await sut.GetOrdersForCustomer(99);
 
         //Assert
 
-        Assert.IsType<NotFoundResult>(orders);
+        Assert.IsType<NotFoundResult>(result);
     }
 
     [Fact]
@@ -90,12 +62,12 @@ public class MainController_Order_Tests
     {
         //Arrange
 
-        var sut = new MainController(await InMemoryDatabase());
+        var sut = await InMemoryDbService.OrderInMemoryDatabase();
 
-        var customer = InMemoryDatabase().Result.Customers.FirstOrDefault(c => c.Name == "hej@gimajl.com");
+        var customer = sut._shopContext.Customers.FirstOrDefault(c => c.Name == "hej@gimajl.com");
         var customerId = customer.Id;
 
-        var product = InMemoryDatabase().Result.Products.FirstOrDefault(p => p.Name == "Mouse");
+        var product = sut._shopContext.Products.FirstOrDefault(p => p.Name == "Mouse");
         var productId = product.Id;
 
         //Act
@@ -112,7 +84,7 @@ public class MainController_Order_Tests
     {
         //Arrange
 
-        var sut = new MainController(await InMemoryDatabase());
+        var sut = await InMemoryDbService.OrderInMemoryDatabase();
 
         //Act
 
@@ -128,9 +100,10 @@ public class MainController_Order_Tests
     {
         //Arrange
 
-        var sut = new MainController(await InMemoryDatabase());
+        var sut = await InMemoryDbService.OrderInMemoryDatabase();
 
-        var customer = InMemoryDatabase().Result.Customers.FirstOrDefault(c => c.Name == "hej@gimajl.com");
+
+        var customer = sut._shopContext.Customers.FirstOrDefault(c => c.Name == "hej@gimajl.com");
         var customerId = customer.Id;
 
         //Act
