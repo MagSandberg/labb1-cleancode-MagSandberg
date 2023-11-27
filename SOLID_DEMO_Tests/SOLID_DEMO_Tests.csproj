@@ -28,8 +28,4 @@
     <ProjectReference Include="..\SOLID-DEMO\Server.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Test_Services\" />
-  </ItemGroup>
-
 </Project>

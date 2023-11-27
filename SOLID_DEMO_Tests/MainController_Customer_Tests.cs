@@ -6,14 +6,14 @@ namespace SOLID_DEMO_Tests
 {
     public class MainControllerCustomerTests
     {
-        private static readonly MainController_InMemoryDb_Service InMemoryDbService = new();
+        private static readonly MainController_CustomerInMemoryDb_Service CustomerInMemoryDbService = new();
 
         [Fact]
         public async Task MainController_RegisterUser_Return_Ok()
         {
             //Arrange
 
-            var sut = await InMemoryDbService.CustomerInMemoryDb();
+            var sut = await CustomerInMemoryDbService.CustomerInMemoryDb();
 
             //Act
 
@@ -29,7 +29,7 @@ namespace SOLID_DEMO_Tests
         {
             //Arrange
 
-            var sut = await InMemoryDbService.CustomerInMemoryDb();
+            var sut = await CustomerInMemoryDbService.CustomerInMemoryDb();
 
             //Act
 
@@ -45,7 +45,7 @@ namespace SOLID_DEMO_Tests
         {
             //Arrange
 
-            var sut = await InMemoryDbService.CustomerInMemoryDb();
+            var sut = await CustomerInMemoryDbService.CustomerInMemoryDb();
 
             //Act
 
@@ -61,7 +61,7 @@ namespace SOLID_DEMO_Tests
         {
             //Arrange
 
-            var sut = await InMemoryDbService.CustomerInMemoryDb();
+            var sut = await CustomerInMemoryDbService.CustomerInMemoryDb();
             var customer = sut._shopContext.Customers.FirstOrDefault(c => c.Id == 1);
 
             //Act
@@ -78,7 +78,7 @@ namespace SOLID_DEMO_Tests
         {
             //Arrange
 
-            var sut = await InMemoryDbService.CustomerInMemoryDb();
+            var sut = await CustomerInMemoryDbService.CustomerInMemoryDb();
             var customer = sut._shopContext.Customers.FirstOrDefault(c => c.Id == 1);
             var wrongPassword = "235345346";
 
@@ -96,7 +96,7 @@ namespace SOLID_DEMO_Tests
         {
             //Arrange
 
-            var sut = await InMemoryDbService.CustomerInMemoryDb();
+            var sut = await CustomerInMemoryDbService.CustomerInMemoryDb();
 
             //Act
 
@@ -112,7 +112,7 @@ namespace SOLID_DEMO_Tests
         {
             //Arrange
 
-            var sut = await InMemoryDbService.CustomerInMemoryDb();
+            var sut = await CustomerInMemoryDbService.CustomerInMemoryDb();
             var newCustomer = sut.RegisterUser(new Customer("mag@email.com", "123"));
 
             //Act

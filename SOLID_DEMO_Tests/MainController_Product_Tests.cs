@@ -6,14 +6,14 @@ namespace SOLID_DEMO_Tests;
 
 public class MainController_Product_Tests
 {
-    private static readonly MainController_InMemoryDb_Service InMemoryDbService = new();
+    private static readonly MainController_ProductInMemoryDb_Service ProductInMemoryDbService = new();
 
     [Fact]
     public async Task MainController_AddProduct_Return_Ok()
     {
         //Arrange
 
-        var sut = await InMemoryDbService.ProductInMemoryDb();
+        var sut = await ProductInMemoryDbService.ProductInMemoryDb();
 
         //Act
 
@@ -29,7 +29,7 @@ public class MainController_Product_Tests
     {
         //Arrange
 
-        var sut = await InMemoryDbService.ProductInMemoryDb();
+        var sut = await ProductInMemoryDbService.ProductInMemoryDb();
 
         //Act
 
@@ -45,7 +45,7 @@ public class MainController_Product_Tests
     {
         //Arrange
 
-        var sut = await InMemoryDbService.ProductInMemoryDb();
+        var sut = await ProductInMemoryDbService.ProductInMemoryDb();
 
         //Act
 
@@ -61,7 +61,7 @@ public class MainController_Product_Tests
     {
         //Arrange
 
-        var sut = await InMemoryDbService.ProductInMemoryDb();
+        var sut = await ProductInMemoryDbService.ProductInMemoryDb();
 
         //Act
 

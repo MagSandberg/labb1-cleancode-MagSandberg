@@ -6,14 +6,14 @@ namespace SOLID_DEMO_Tests;
 
 public class MainController_Order_Tests
 {
-    private static readonly MainController_InMemoryDb_Service InMemoryDbService = new();
+    private static readonly MainController_OrderInMemoryDb_Service OrderInMemoryDbService = new();
 
     [Fact]
     public async Task MainController_GetAllOrders_Returns_Ok()
     {
         //Arrange
 
-        var sut = await InMemoryDbService.OrderInMemoryDatabase();
+        var sut = await OrderInMemoryDbService.OrderInMemoryDatabase();
 
         //Act
 
@@ -29,7 +29,7 @@ public class MainController_Order_Tests
     {
         //Arrange
 
-        var sut = await InMemoryDbService.OrderInMemoryDatabase();
+        var sut = await OrderInMemoryDbService.OrderInMemoryDatabase();
         var customerId = sut._shopContext.Customers.FirstOrDefault(c => c.Name == "hej@gimajl.com");
 
         //Act
@@ -46,7 +46,7 @@ public class MainController_Order_Tests
     {
         //Arrange
 
-        var sut = await InMemoryDbService.OrderInMemoryDatabase();
+        var sut = await OrderInMemoryDbService.OrderInMemoryDatabase();
 
         //Act
 
@@ -62,7 +62,7 @@ public class MainController_Order_Tests
     {
         //Arrange
 
-        var sut = await InMemoryDbService.OrderInMemoryDatabase();
+        var sut = await OrderInMemoryDbService.OrderInMemoryDatabase();
 
         var customer = sut._shopContext.Customers.FirstOrDefault(c => c.Name == "hej@gimajl.com");
         var customerId = customer.Id;
@@ -84,7 +84,7 @@ public class MainController_Order_Tests
     {
         //Arrange
 
-        var sut = await InMemoryDbService.OrderInMemoryDatabase();
+        var sut = await OrderInMemoryDbService.OrderInMemoryDatabase();
 
         //Act
 
@@ -100,7 +100,7 @@ public class MainController_Order_Tests
     {
         //Arrange
 
-        var sut = await InMemoryDbService.OrderInMemoryDatabase();
+        var sut = await OrderInMemoryDbService.OrderInMemoryDatabase();
 
 
         var customer = sut._shopContext.Customers.FirstOrDefault(c => c.Name == "hej@gimajl.com");

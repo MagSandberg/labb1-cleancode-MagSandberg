@@ -5,10 +5,10 @@ using Shared;
 
 namespace SOLID_DEMO_Tests.Test_Services;
 
-public class MainController_InMemoryDb_Service
+public class MainController_OrderInMemoryDb_Service
 {
     public static DbContextOptions _options = new DbContextOptionsBuilder<ShopContext>()
-        .UseInMemoryDatabase(databaseName: "InMemory_CustomersDb")
+        .UseInMemoryDatabase(databaseName: "InMemory_OrderDb")
         .Options;
     public static ShopContext _shopContext = new ShopContext(_options);
     public static MainController _mainController = new MainController(_shopContext);
@@ -31,34 +31,6 @@ public class MainController_InMemoryDb_Service
         };
 
         await mainController._shopContext.Orders.AddAsync(orderOne);
-        await mainController._shopContext.SaveChangesAsync();
-
-        return mainController;
-    }
-
-    public async Task<MainController> CustomerInMemoryDb()
-    {
-        var mainController = _mainController;
-
-        var customerOne = new Customer("hej@gimajl.com", "123");
-        var customerTwo = new Customer("b@gimajl.com", "123");
-        var customerThree = new Customer("c@gimajl.com", "123");
-
-        await mainController._shopContext.Customers.AddRangeAsync(customerOne, customerTwo, customerThree);
-        await mainController._shopContext.SaveChangesAsync();
-
-        return mainController;
-    }
-
-    public async Task<MainController> ProductInMemoryDb()
-    {
-        var mainController = _mainController;
-
-        var prodOne = new Product { Name = "Apple", Description = "Apple Description" };
-        var prodTwo = new Product { Name = "Banana", Description = "Banana Description" };
-        var prodThree = new Product { Name = "Pear", Description = "Pear Description" };
-
-        await mainController._shopContext.Products.AddRangeAsync(prodOne, prodTwo, prodThree);
         await mainController._shopContext.SaveChangesAsync();
 
         return mainController;
