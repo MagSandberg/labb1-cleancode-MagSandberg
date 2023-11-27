@@ -1,9 +1,8 @@
-﻿using System.Collections.Immutable;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Shared;
 using System.ComponentModel.DataAnnotations;
 using Server.DataAccess;
+using Shared;
 
 namespace Server.Controllers;
 
@@ -24,12 +23,14 @@ public class MainController : ControllerBase
         return Ok(await _shopContext.Customers.ToListAsync());
     }
 
+    //Fix this to use email
     [HttpGet("/customers/{email}")]
     public async Task<IActionResult> GetCustomer(string email)
     {
         return Ok(await _shopContext.Customers.FirstOrDefaultAsync(c => c.Name.Equals(email)));
     }
 
+    //Change model to include email or remove @ check
     [HttpPost("/customers/register")]
     public async Task<IActionResult> RegisterUser(Customer customer)
     {
@@ -40,6 +41,7 @@ public class MainController : ControllerBase
         return Ok();
     }
 
+    //Fix this to use email
     [HttpPost("/customers/login")]
     public async Task<IActionResult> LoginCustomer(string email, string password)
     {
@@ -68,6 +70,7 @@ public class MainController : ControllerBase
         return Ok(await _shopContext.Products.ToListAsync());
     }
 
+    //This need work
     [HttpGet("/products/{id}")]
     public async Task<IActionResult> GetProduct(int id)
     {
