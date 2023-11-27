@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using DataAccess.Models;
+using Microsoft.EntityFrameworkCore;
 using Server.Controllers;
 using Server.DataAccess;
 using Shared;
@@ -17,9 +18,9 @@ public class MainController_CustomerInMemoryDb_Service
     {
         var mainController = _mainController;
 
-        var customerOne = new Customer("hej@gimajl.com", "123");
-        var customerTwo = new Customer("b@gimajl.com", "123");
-        var customerThree = new Customer("c@gimajl.com", "123");
+        var customerOne = new CustomerModel("hej@gimajl.com", "123");
+        var customerTwo = new CustomerModel("b@gimajl.com", "123");
+        var customerThree = new CustomerModel("c@gimajl.com", "123");
 
         await mainController._shopContext.Customers.AddRangeAsync(customerOne, customerTwo, customerThree);
         await mainController._shopContext.SaveChangesAsync();

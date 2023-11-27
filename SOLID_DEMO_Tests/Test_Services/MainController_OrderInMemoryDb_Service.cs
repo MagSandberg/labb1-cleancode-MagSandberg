@@ -2,6 +2,7 @@
 using Server.Controllers;
 using Server.DataAccess;
 using Shared;
+using Shared.DTOs;
 
 namespace SOLID_DEMO_Tests.Test_Services;
 
@@ -21,7 +22,7 @@ public class MainController_OrderInMemoryDb_Service
         var prodTwo = new Product { Name = "Keyboard", Description = "Keyboard Description" };
         var prodThree = new Product { Name = "Screen", Description = "Screen Description" };
 
-        var customerOne = new Customer("hej@gimajl.com", "123");
+        var customerOne = new CustomerDTO("hej@gimajl.com", "123");
 
         var orderOne = new Order
         {

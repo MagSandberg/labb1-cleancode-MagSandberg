@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 using Server.DataAccess;
 using Shared;
+using Shared.DTOs;
 
 namespace Server.Controllers;
 
@@ -32,11 +33,11 @@ public class MainController : ControllerBase
 
     //Change model to include email or remove @ check
     [HttpPost("/customers/register")]
-    public async Task<IActionResult> RegisterUser(Customer customer)
+    public async Task<IActionResult> RegisterUser(CustomerDTO customerDto)
     {
-        if (!customer.Name.Contains("@"))
+        if (!customerDto.Name.Contains("@"))
             throw new ValidationException("Email is not an email");
-        await _shopContext.AddAsync(customer);
+        await _shopContext.AddAsync(customerDto);
         await _shopContext.SaveChangesAsync();
         return Ok();
     }
@@ -94,14 +95,14 @@ public class MainController : ControllerBase
     [HttpGet("/orders")]
     public async Task<IActionResult> GetAllOrders()
     {
-        var orders = await _shopContext.Orders.Include(o=> o.Customer).Include(o=>o.Products).ToListAsync();
+        var orders = await _shopContext.Orders.Include(o=> o.CustomerModel).Include(o=>o.Products).ToListAsync();
         return Ok(orders);
     }
 
     [HttpGet("/orders/customer/{id}")]
     public async Task<IActionResult> GetOrdersForCustomer(int id)
     {
-        var orders = await _shopContext.Orders.Include(o=>o.Customer).Where(c=> c.Customer.Id == id).Include(o=>o.Products).ToListAsync();
+        var orders = await _shopContext.Orders.Include(o=>o.CustomerModel).Where(c=> c.CustomerModel.Id == id).Include(o=>o.Products).ToListAsync();
         if (orders.Count == 0)
         {
             return NotFound();
@@ -175,7 +176,7 @@ public class MainController : ControllerBase
             products.Add(prod);
         }
 
-        var order = await _shopContext.Orders.Include(o => o.Customer).Include(o => o.Products).FirstOrDefaultAsync(o => o.Id == id);
+        var order = await _shopContext.Orders.Include(o => o.CustomerModel).Include(o => o.Products).FirstOrDefaultAsync(o => o.Id == id);
         order.ShippingDate = DateTime.Now.AddDays(5);
         order.Products.AddRange(products);
         await _shopContext.SaveChangesAsync();
@@ -192,7 +193,7 @@ public class MainController : ControllerBase
             return BadRequest();
         }
 
-        var order = await _shopContext.Orders.Include(o => o.Customer.Id == customer.Id).Include(o => o.Products).FirstOrDefaultAsync(o => o.Id == id);
+        var order = await _shopContext.Orders.Include(o => o.CustomerModel.Id == customer.Id).Include(o => o.Products).FirstOrDefaultAsync(o => o.Id == id);
         order.ShippingDate = DateTime.Now.AddDays(5);
 
         foreach (var prodId in itemsToRemove.ProductIds)

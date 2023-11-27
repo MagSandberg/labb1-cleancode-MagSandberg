@@ -1,3 +1,4 @@
+using DataAccess.Models;
 using Microsoft.AspNetCore.Mvc;
 using Shared;
 using SOLID_DEMO_Tests.Test_Services;
@@ -17,7 +18,7 @@ namespace SOLID_DEMO_Tests
 
             //Act
 
-            var result = await sut.RegisterUser(new Customer("mag@email.com", "123"));
+            var result = await sut.RegisterUser(new CustomerModel("mag@email.com", "123"));
             
             //Assert
 
@@ -113,7 +114,7 @@ namespace SOLID_DEMO_Tests
             //Arrange
 
             var sut = await CustomerInMemoryDbService.CustomerInMemoryDb();
-            var newCustomer = sut.RegisterUser(new Customer("mag@email.com", "123"));
+            var newCustomer = sut.RegisterUser(new CustomerModel("mag@email.com", "123"));
 
             //Act
 
