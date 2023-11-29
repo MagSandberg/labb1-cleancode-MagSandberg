@@ -36,10 +36,12 @@ public class CustomerRepository : ICustomerRepository
         return _customerMapper.MapToCustomerDto(customer);
     }
 
-    public async Task RegisterUser(CustomerDto customer)
+    public async Task<string> RegisterUser(CustomerDto customer)
     {
         await _shopContext.AddAsync(_customerMapper.MapToCustomerModel(customer));
         await _shopContext.SaveChangesAsync();
+
+        return "Customer successfully registered!";
     }
 
     public async Task UpdateCustomer(CustomerDto customer)
