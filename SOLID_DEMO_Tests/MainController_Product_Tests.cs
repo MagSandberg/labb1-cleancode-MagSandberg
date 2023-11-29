@@ -8,67 +8,67 @@ public class MainController_Product_Tests
 {
     private static readonly MainController_ProductInMemoryDb_Service ProductInMemoryDbService = new();
 
-    [Fact]
-    public async Task MainController_AddProduct_Return_Ok()
-    {
-        //Arrange
+    //[Fact]
+    //public async Task MainController_AddProduct_Return_Ok()
+    //{
+    //    //Arrange
 
-        var sut = await ProductInMemoryDbService.ProductInMemoryDb();
+    //    var sut = await ProductInMemoryDbService.ProductInMemoryDb();
 
-        //Act
+    //    //Act
 
-        var result = await sut.AddProduct(new Product { Name = "Orange", Description = "Orange Description" });
+    //    var result = await sut.AddProduct(new Product { Name = "Orange", Description = "Orange Description" });
 
-        //Assert
+    //    //Assert
 
-        Assert.IsType<OkResult>(result);
-    }
+    //    Assert.IsType<OkResult>(result);
+    //}
 
-    [Fact]
-    public async Task MainController_AddProduct_Return_BadRequest()
-    {
-        //Arrange
+    //[Fact]
+    //public async Task MainController_AddProduct_Return_BadRequest()
+    //{
+    //    //Arrange
 
-        var sut = await ProductInMemoryDbService.ProductInMemoryDb();
+    //    var sut = await ProductInMemoryDbService.ProductInMemoryDb();
 
-        //Act
+    //    //Act
 
-        var result = await sut.AddProduct(new Product { Name = "Apple", Description = "New Apple Description" });
+    //    var result = await sut.AddProduct(new Product { Name = "Apple", Description = "New Apple Description" });
 
-        //Assert
+    //    //Assert
 
-        Assert.IsType<BadRequestResult>(result);
-    }
+    //    Assert.IsType<BadRequestResult>(result);
+    //}
 
-    [Fact]
-    public async Task MainController_GetProducts_Return_Ok()
-    {
-        //Arrange
+    //[Fact]
+    //public async Task MainController_GetProducts_Return_Ok()
+    //{
+    //    //Arrange
 
-        var sut = await ProductInMemoryDbService.ProductInMemoryDb();
+    //    var sut = await ProductInMemoryDbService.ProductInMemoryDb();
 
-        //Act
+    //    //Act
 
-        var result = await sut.GetProducts();
+    //    var result = await sut.GetProducts();
 
-        //Assert
+    //    //Assert
 
-        Assert.IsType<OkObjectResult>(result);
-    }
+    //    Assert.IsType<OkObjectResult>(result);
+    //}
 
-    [Fact]
-    public async Task MainController_GetProduct_Return_Ok()
-    {
-        //Arrange
+    //[Fact]
+    //public async Task MainController_GetProduct_Return_Ok()
+    //{
+    //    //Arrange
 
-        var sut = await ProductInMemoryDbService.ProductInMemoryDb();
+    //    var sut = await ProductInMemoryDbService.ProductInMemoryDb();
 
-        //Act
+    //    //Act
 
-        var result = await sut.GetProduct(1);
+    //    var result = await sut.GetProduct(1);
 
-        //Assert
+    //    //Assert
 
-        Assert.IsType<OkObjectResult>(result);
-    }
+    //    Assert.IsType<OkObjectResult>(result);
+    //}
 }

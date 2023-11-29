@@ -10,6 +10,14 @@ public class ShopContext : DbContext
     public DbSet<Product> Products { get; set; }
     public DbSet<Order> Orders { get; set; }
 
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<CustomerModel>(entity =>
+        {
+            entity.HasKey(e => e.CustomerId).HasName("PK_Customers");
+        });
+    }
+
     public ShopContext(DbContextOptions options) : base(options)
     {
 

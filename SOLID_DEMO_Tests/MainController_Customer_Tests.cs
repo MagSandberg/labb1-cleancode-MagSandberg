@@ -1,24 +1,26 @@
 using DataAccess.Models;
 using Microsoft.AspNetCore.Mvc;
-using Shared;
-using SOLID_DEMO_Tests.Test_Services;
+using Server.Services.Mapping;
+using Server.Services.Mapping.Interfaces;
+using SOLID_DEMO_Tests.Test_Interfaces;
 
 namespace SOLID_DEMO_Tests
 {
     public class MainControllerCustomerTests
     {
-        private static readonly MainController_CustomerInMemoryDb_Service CustomerInMemoryDbService = new();
+        public ICustomerMapperProfiles CustomerMapper = new CustomerMapperProfile();
 
         [Fact]
         public async Task MainController_RegisterUser_Return_Ok()
         {
             //Arrange
 
-            var sut = await CustomerInMemoryDbService.CustomerInMemoryDb();
+            var sut = await IMainControllerWithShopContext.CustomerInMemoryDb();
+            var customer = new CustomerModel("dnd@dnd.com", "123", "Dnd", "Dndson");
 
             //Act
 
-            var result = await sut.RegisterUser(new CustomerModel("mag@email.com", "123"));
+            var result = await sut.RegisterUser(CustomerMapper.MapToCustomerDto(customer));
             
             //Assert
 
@@ -30,7 +32,7 @@ namespace SOLID_DEMO_Tests
         {
             //Arrange
 
-            var sut = await CustomerInMemoryDbService.CustomerInMemoryDb();
+            var sut = await IMainControllerWithShopContext.CustomerInMemoryDb();
 
             //Act
 
@@ -46,11 +48,11 @@ namespace SOLID_DEMO_Tests
         {
             //Arrange
 
-            var sut = await CustomerInMemoryDbService.CustomerInMemoryDb();
+            var sut = await IMainControllerWithShopContext.CustomerInMemoryDb();
 
             //Act
 
-            var result = await sut.GetCustomer("hej@gimajl.com");
+            var result = await sut.GetCustomer("ana@ana.com");
 
             //Assert
 
@@ -62,12 +64,15 @@ namespace SOLID_DEMO_Tests
         {
             //Arrange
 
-            var sut = await CustomerInMemoryDbService.CustomerInMemoryDb();
-            var customer = sut._shopContext.Customers.FirstOrDefault(c => c.Id == 1);
+            var sut = await IMainControllerWithShopContext.CustomerInMemoryDb();
+
+            var customers = sut._shopContext.Customers.ToList();
+            var customerPassword = customers[0].Password;
+            var customerEmail = customers[0].Email;
 
             //Act
 
-            var result = await sut.LoginCustomer(customer.Name, customer.Password);
+            var result = await sut.LoginCustomer(customerEmail, customerPassword);
 
             //Assert
 
@@ -79,13 +84,15 @@ namespace SOLID_DEMO_Tests
         {
             //Arrange
 
-            var sut = await CustomerInMemoryDbService.CustomerInMemoryDb();
-            var customer = sut._shopContext.Customers.FirstOrDefault(c => c.Id == 1);
-            var wrongPassword = "235345346";
+            var sut = await IMainControllerWithShopContext.CustomerInMemoryDb();
+
+            var customers = sut._shopContext.Customers.ToList();
+            var customerPassword = new Guid();
+            var customerEmail = customers[0].Email;
 
             //Act
 
-            var result = await sut.LoginCustomer(customer.Name, wrongPassword);
+            var result = await sut.LoginCustomer(customerEmail, customerPassword.ToString());
 
             //Assert
 
@@ -97,11 +104,13 @@ namespace SOLID_DEMO_Tests
         {
             //Arrange
 
-            var sut = await CustomerInMemoryDbService.CustomerInMemoryDb();
+            var sut = await IMainControllerWithShopContext.CustomerInMemoryDb();
+
+            var customerId = new Guid();
 
             //Act
 
-            var result = await sut.DeleteCustomer(999);
+            var result = await sut.DeleteCustomer(customerId);
 
             //Assert
 
@@ -113,12 +122,16 @@ namespace SOLID_DEMO_Tests
         {
             //Arrange
 
-            var sut = await CustomerInMemoryDbService.CustomerInMemoryDb();
-            var newCustomer = sut.RegisterUser(new CustomerModel("mag@email.com", "123"));
+            var sut = await IMainControllerWithShopContext.CustomerInMemoryDb();
+
+            var newCustomer = new CustomerModel("ene@ene.com", "123", "Ene", "Eneson");
+            var registerCustomer = await sut.RegisterUser(CustomerMapper.MapToCustomerDto(new));
+
+            var customer = sut._shopContext.Customers.Where(c => c.Email == "ene@ene.com").ToList();
 
             //Act
 
-            var result = await sut.DeleteCustomer(newCustomer.Id);
+            var result = await sut.DeleteCustomer(customer[0].CustomerId);
 
             //Assert
 
