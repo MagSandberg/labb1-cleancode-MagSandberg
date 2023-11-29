@@ -1,8 +1,8 @@
 ﻿using DataAccess.Models;
-using Server.Services.Mapping.Interfaces;
+using DataAccess.Services.Mapping.Interfaces;
 using Shared.DTOs;
 
-namespace Server.Services.Mapping;
+namespace DataAccess.Services.Mapping;
 
 public class CustomerMapperProfile : ICustomerMapperProfiles
 {

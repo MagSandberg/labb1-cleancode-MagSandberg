@@ -1,7 +1,6 @@
 using DataAccess.Models;
+using DataAccess.Services.Mapping.Interfaces;
 using Microsoft.AspNetCore.Mvc;
-using Server.Services.Mapping;
-using Server.Services.Mapping.Interfaces;
 using SOLID_DEMO_Tests.Test_Interfaces;
 
 namespace SOLID_DEMO_Tests
@@ -125,7 +124,7 @@ namespace SOLID_DEMO_Tests
             var sut = await IMainControllerWithShopContext.CustomerInMemoryDb();
 
             var newCustomer = new CustomerModel("ene@ene.com", "123", "Ene", "Eneson");
-            var registerCustomer = await sut.RegisterUser(CustomerMapper.MapToCustomerDto(new));
+            var registerCustomer = await sut.RegisterUser(CustomerMapper.MapToCustomerDto(newCustomer));
 
             var customer = sut._shopContext.Customers.Where(c => c.Email == "ene@ene.com").ToList();
 

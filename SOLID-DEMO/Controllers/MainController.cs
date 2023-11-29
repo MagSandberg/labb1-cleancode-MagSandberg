@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
+using DataAccess.Services.Mapping;
+using DataAccess.Services.Mapping.Interfaces;
 using Server.DataAccess;
-using Server.Services.Mapping;
-using Server.Services.Mapping.Interfaces;
 using Shared.DTOs;
 
 namespace Server.Controllers;

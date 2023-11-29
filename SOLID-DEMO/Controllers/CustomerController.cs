@@ -1,9 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
+using DataAccess.Repositories.Interfaces;
+using DataAccess.Services.Mapping;
+using DataAccess.Services.Mapping.Interfaces;
 using Server.DataAccess;
-using Server.Services.Mapping;
-using Server.Services.Mapping.Interfaces;
 using Shared.DTOs;
 
 namespace Server.Controllers;
@@ -14,6 +15,7 @@ public class CustomerController : ControllerBase
 {
     public ICustomerMapperProfiles CustomerMapper = new CustomerMapperProfile();
     public ShopContext _shopContext;
+    public ICustomerRepository _customerRepository;
 
     public CustomerController(ShopContext shopContext)
     {
@@ -23,25 +25,29 @@ public class CustomerController : ControllerBase
     [HttpGet("/customers")]
     public async Task<IActionResult> GetCustomers()
     {
-        return Ok(await _shopContext.Customers.ToListAsync());
+        var customers = await _customerRepository.GetCustomers();
+        return Ok(customers);
     }
 
-    //Fix this to use email
     [HttpGet("/customers/{email}")]
-    public async Task<IActionResult> GetCustomer(string email)
+    public async Task<IActionResult> GetCustomerByEmail(string email)
     {
-        return Ok(await _shopContext.Customers.FirstOrDefaultAsync(c => c.Email.Equals(email)));
+        var customer = await _customerRepository.GetCustomerByEmail(email);
+        return Ok(customer);
     }
 
-    //Change model to include email or remove @ check
     [HttpPost("/customers/register")]
     public async Task<IActionResult> RegisterUser(CustomerDto customerDto)
     {
-        if (!customerDto.Email.Contains("@"))
-            throw new ValidationException("Email is not an email");
-        await _shopContext.AddAsync(CustomerMapper.MapToCustomerModel(customerDto));
-        await _shopContext.SaveChangesAsync();
-        return Ok();
+        await _customerRepository.RegisterUser(customerDto);
+
+        var result = await RegisterUser(customerDto);
+        if (result is OkObjectResult)
+        {
+            return Ok("Customer successfully registered!");
+        }
+
+        return BadRequest("Customer could not register. Are you missing a field?");
     }
 
     //Fix this to use email
