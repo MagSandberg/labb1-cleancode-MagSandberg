@@ -22,8 +22,9 @@ namespace Shared.DTOs
         [StringLength(50, MinimumLength = 8, ErrorMessage = "Password must be between 8-50 characters long.")]
         public string Password { get; set; } = string.Empty;
 
-        public CustomerDto(string email, string password, string firstName, string lastName)
+        public CustomerDto(string email, string password, string firstName, string lastName, Guid id)
         {
+            Id = id;
             Email = email;
             Password = password;
             FirstName = firstName;

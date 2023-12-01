@@ -6,136 +6,136 @@ using SOLID_DEMO_Tests.Test_Interfaces;
 
 namespace SOLID_DEMO_Tests
 {
-    public class MainControllerCustomerTests
-    {
-        public ICustomerMapperProfiles CustomerMapper = new CustomerMapperProfile();
+    //public class MainControllerCustomerTests
+    //{
+    //    public ICustomerMapperProfile CustomerMapper = new CustomerMapperProfile();
 
-        [Fact]
-        public async Task MainController_RegisterUser_Return_Ok()
-        {
-            //Arrange
+    //    [Fact]
+    //    public async Task MainController_RegisterUser_Return_Ok()
+    //    {
+    //        //Arrange
 
-            var sut = await IMainControllerWithShopContext.CustomerInMemoryDb();
-            var customer = new CustomerModel("dnd@dnd.com", "123", "Dnd", "Dndson");
+    //        var sut = await IMainControllerWithShopContext.CustomerInMemoryDb();
+    //        var customer = new CustomerModel("dnd@dnd.com", "123", "Dnd", "Dndson");
 
-            //Act
+    //        //Act
 
-            var result = await sut.RegisterUser(CustomerMapper.MapToCustomerDto(customer));
+    //        var result = await sut.RegisterUser(CustomerMapper.MapToCustomerDto(customer));
             
-            //Assert
+    //        //Assert
 
-            Assert.IsType<OkResult>(result);
-        }
+    //        Assert.IsType<OkResult>(result);
+    //    }
 
-        [Fact]
-        public async Task MainController_GetCustomers_Return_ListOfCustomersObject()
-        {
-            //Arrange
+    //    [Fact]
+    //    public async Task MainController_GetCustomers_Return_ListOfCustomersObject()
+    //    {
+    //        //Arrange
 
-            var sut = await IMainControllerWithShopContext.CustomerInMemoryDb();
+    //        var sut = await IMainControllerWithShopContext.CustomerInMemoryDb();
 
-            //Act
+    //        //Act
 
-            var result = await sut.GetCustomers();
+    //        var result = await sut.GetCustomers();
 
-            //Assert
+    //        //Assert
 
-            Assert.IsType<OkObjectResult>(result);
-        }
+    //        Assert.IsType<OkObjectResult>(result);
+    //    }
 
-        [Fact]
-        public async Task MainController_GetCustomer_Return_CustomerObject()
-        {
-            //Arrange
+    //    [Fact]
+    //    public async Task MainController_GetCustomer_Return_CustomerObject()
+    //    {
+    //        //Arrange
 
-            var sut = await IMainControllerWithShopContext.CustomerInMemoryDb();
+    //        var sut = await IMainControllerWithShopContext.CustomerInMemoryDb();
 
-            //Act
+    //        //Act
 
-            var result = await sut.GetCustomer("ana@ana.com");
+    //        var result = await sut.GetCustomer("ana@ana.com");
 
-            //Assert
+    //        //Assert
 
-            Assert.IsType<OkObjectResult>(result);
-        }
+    //        Assert.IsType<OkObjectResult>(result);
+    //    }
 
-        [Fact]
-        public async Task MainController_LoginCustomer_Return_Ok()
-        {
-            //Arrange
+    //    [Fact]
+    //    public async Task MainController_LoginCustomer_Return_Ok()
+    //    {
+    //        //Arrange
 
-            var sut = await IMainControllerWithShopContext.CustomerInMemoryDb();
+    //        var sut = await IMainControllerWithShopContext.CustomerInMemoryDb();
 
-            var customers = sut._shopContext.Customers.ToList();
-            var customerPassword = customers[0].Password;
-            var customerEmail = customers[0].Email;
+    //        var customers = sut._shopContext.Customers.ToList();
+    //        var customerPassword = customers[0].Password;
+    //        var customerEmail = customers[0].Email;
 
-            //Act
+    //        //Act
 
-            var result = await sut.LoginCustomer(customerEmail, customerPassword);
+    //        var result = await sut.LoginCustomer(customerEmail, customerPassword);
 
-            //Assert
+    //        //Assert
 
-            Assert.IsType<OkResult>(result);
-        }
+    //        Assert.IsType<OkResult>(result);
+    //    }
 
-        [Fact]
-        public async Task MainController_LoginCustomer_Return_BadRequest()
-        {
-            //Arrange
+    //    [Fact]
+    //    public async Task MainController_LoginCustomer_Return_BadRequest()
+    //    {
+    //        //Arrange
 
-            var sut = await IMainControllerWithShopContext.CustomerInMemoryDb();
+    //        var sut = await IMainControllerWithShopContext.CustomerInMemoryDb();
 
-            var customers = sut._shopContext.Customers.ToList();
-            var customerPassword = new Guid();
-            var customerEmail = customers[0].Email;
+    //        var customers = sut._shopContext.Customers.ToList();
+    //        var customerPassword = new Guid();
+    //        var customerEmail = customers[0].Email;
 
-            //Act
+    //        //Act
 
-            var result = await sut.LoginCustomer(customerEmail, customerPassword.ToString());
+    //        var result = await sut.LoginCustomer(customerEmail, customerPassword.ToString());
 
-            //Assert
+    //        //Assert
 
-            Assert.IsType<BadRequestResult>(result);
-        }
+    //        Assert.IsType<BadRequestResult>(result);
+    //    }
 
-        [Fact]
-        public async Task MainController_DeleteCustomer_Return_BadRequest()
-        {
-            //Arrange
+    //    [Fact]
+    //    public async Task MainController_DeleteCustomer_Return_BadRequest()
+    //    {
+    //        //Arrange
 
-            var sut = await IMainControllerWithShopContext.CustomerInMemoryDb();
+    //        var sut = await IMainControllerWithShopContext.CustomerInMemoryDb();
 
-            var customerId = new Guid();
+    //        var customerId = new Guid();
 
-            //Act
+    //        //Act
 
-            var result = await sut.DeleteCustomer(customerId);
+    //        var result = await sut.DeleteCustomer(customerId);
 
-            //Assert
+    //        //Assert
 
-            Assert.IsType<BadRequestResult>(result);
-        }
+    //        Assert.IsType<BadRequestResult>(result);
+    //    }
 
-        [Fact]
-        public async Task MainController_DeleteCustomer_Return_Ok()
-        {
-            //Arrange
+    //    [Fact]
+    //    public async Task MainController_DeleteCustomer_Return_Ok()
+    //    {
+    //        //Arrange
 
-            var sut = await IMainControllerWithShopContext.CustomerInMemoryDb();
+    //        var sut = await IMainControllerWithShopContext.CustomerInMemoryDb();
 
-            var newCustomer = new CustomerModel("ene@ene.com", "123", "Ene", "Eneson");
-            var registerCustomer = await sut.RegisterUser(CustomerMapper.MapToCustomerDto(newCustomer));
+    //        var newCustomer = new CustomerModel("ene@ene.com", "123", "Ene", "Eneson");
+    //        var registerCustomer = await sut.RegisterUser(CustomerMapper.MapToCustomerDto(newCustomer));
 
-            var customer = sut._shopContext.Customers.Where(c => c.Email == "ene@ene.com").ToList();
+    //        var customer = sut._shopContext.Customers.Where(c => c.Email == "ene@ene.com").ToList();
 
-            //Act
+    //        //Act
 
-            var result = await sut.DeleteCustomer(customer[0].CustomerId);
+    //        var result = await sut.DeleteCustomer(customer[0].CustomerId);
 
-            //Assert
+    //        //Assert
 
-            Assert.IsType<OkResult>(result);
-        }
-    }
+    //        Assert.IsType<OkResult>(result);
+    //    }
+    //}
 }

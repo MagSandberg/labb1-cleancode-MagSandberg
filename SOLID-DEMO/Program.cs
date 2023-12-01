@@ -1,3 +1,9 @@
+using DataAccess.Repositories;
+using DataAccess.Repositories.Interfaces;
+using DataAccess.Services.Mapping;
+using DataAccess.Services.Mapping.Interfaces;
+using DataAccess.UnitOfWork;
+using DataAccess.UnitOfWork.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Server.DataAccess;
 
@@ -9,10 +15,13 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
+builder.Services.AddScoped<ICustomerMapperProfile, CustomerMapperProfile>();
+builder.Services.AddScoped<IUnitOfWorkCustomer, UnitOfWorkCustomer>();
 
 builder.Services.AddDbContext<ShopContext>(options =>
 {
-    var connectionString = builder.Configuration.GetConnectionString("UsersDb");
+    var connectionString = builder.Configuration.GetConnectionString("ShopDb");
     options.UseSqlServer(connectionString);
 });
 

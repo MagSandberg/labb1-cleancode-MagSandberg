@@ -1,60 +1,57 @@
-﻿using DataAccess.Models;
-using DataAccess.Repositories.Interfaces;
-using DataAccess.Services.Mapping.Interfaces;
-using Microsoft.EntityFrameworkCore;
-using Server.DataAccess;
+﻿using DataAccess.Repositories.Interfaces;
+using DataAccess.UnitOfWork.Interfaces;
 using Shared.DTOs;
 
 namespace DataAccess.Repositories;
 
 public class CustomerRepository : ICustomerRepository
 {
-    private readonly ShopContext _shopContext;
-    private readonly ICustomerMapperProfiles _customerMapper;
+    private readonly IUnitOfWorkCustomer _unitOfWorkCustomer;
 
-    public CustomerRepository(ShopContext shopContext)
+    public CustomerRepository(IUnitOfWorkCustomer unitOfWorkCustomer)
     {
-        _shopContext = shopContext;
+        _unitOfWorkCustomer = unitOfWorkCustomer;
     }
 
     public async Task<List<CustomerDto>> GetCustomers()
     {
-        var customers = await _shopContext.Customers.ToListAsync();
-        var customerDtos = new List<CustomerDto>();
+        var customers = await _unitOfWorkCustomer.GetCustomers();
 
-        foreach (var customer in customers)
-        {
-            customerDtos.Add(_customerMapper.MapToCustomerDto(customer));
-        }
-
-        return customerDtos;
+        return customers.ToList();
     }
 
     public async Task<CustomerDto> GetCustomerByEmail(string email)
     {
-        var customer = await _shopContext.Customers.FirstOrDefaultAsync(c => c.Email.Equals(email));
-        return _customerMapper.MapToCustomerDto(customer);
+        var customer = await _unitOfWorkCustomer.GetCustomerByEmail(email);
+
+        return customer;
     }
 
     public async Task<string> RegisterUser(CustomerDto customer)
     {
-        await _shopContext.AddAsync(_customerMapper.MapToCustomerModel(customer));
-        await _shopContext.SaveChangesAsync();
+        var result = await _unitOfWorkCustomer.RegisterUser(customer);
 
-        return "Customer successfully registered!";
+        return result;
     }
 
-    public async Task UpdateCustomer(CustomerDto customer)
+    public async Task<string> UpdateCustomer(CustomerDto customer, Guid id)
     {
-        var customerToUpdate = await _shopContext.Customers.FirstOrDefaultAsync(c => c.CustomerId.Equals(customer.CustomerId));
-        customerToUpdate = _customerMapper.MapToCustomerModel(customer);
-        await _shopContext.SaveChangesAsync();
+        var result = await _unitOfWorkCustomer.UpdateCustomer(customer, id);
+
+        return result;
     }
 
-    public async Task DeleteCustomer(Guid id)
+    public async Task<string> LoginCustomer(string email, string password)
     {
-        var customerToDelete = await _shopContext.Customers.FirstOrDefaultAsync(c => c.CustomerId.Equals(id));
-        _shopContext.Remove(customerToDelete);
-        await _shopContext.SaveChangesAsync();
+        var result = await _unitOfWorkCustomer.LoginCustomer(email, password);
+
+        return result;
+    }
+
+    public async Task<string> DeleteCustomer(Guid id)
+    {
+        var result = await _unitOfWorkCustomer.DeleteCustomer(id);
+
+        return result;
     }
 }

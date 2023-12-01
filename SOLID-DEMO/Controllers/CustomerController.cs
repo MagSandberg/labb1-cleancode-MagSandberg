@@ -1,10 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using System.ComponentModel.DataAnnotations;
 using DataAccess.Repositories.Interfaces;
-using DataAccess.Services.Mapping;
-using DataAccess.Services.Mapping.Interfaces;
-using Server.DataAccess;
 using Shared.DTOs;
 
 namespace Server.Controllers;
@@ -13,19 +8,23 @@ namespace Server.Controllers;
 [Route("/api")]
 public class CustomerController : ControllerBase
 {
-    public ICustomerMapperProfiles CustomerMapper = new CustomerMapperProfile();
-    public ShopContext _shopContext;
-    public ICustomerRepository _customerRepository;
+    private readonly ICustomerRepository _customerRepository;
 
-    public CustomerController(ShopContext shopContext)
+    public CustomerController(ICustomerRepository customerRepository)
     {
-        _shopContext = shopContext;
+        _customerRepository = customerRepository;
     }
 
     [HttpGet("/customers")]
     public async Task<IActionResult> GetCustomers()
     {
         var customers = await _customerRepository.GetCustomers();
+
+        if (customers.Count == 0)
+        {
+            return NotFound("No customers found.");
+        }
+
         return Ok(customers);
     }
 
@@ -33,43 +32,39 @@ public class CustomerController : ControllerBase
     public async Task<IActionResult> GetCustomerByEmail(string email)
     {
         var customer = await _customerRepository.GetCustomerByEmail(email);
+
         return Ok(customer);
     }
 
     [HttpPost("/customers/register")]
     public async Task<IActionResult> RegisterUser(CustomerDto customerDto)
     {
-        await _customerRepository.RegisterUser(customerDto);
+        var result = await _customerRepository.RegisterUser(customerDto);
 
-        var result = await RegisterUser(customerDto);
-        if (result is OkObjectResult)
-        {
-            return Ok("Customer successfully registered!");
-        }
-
-        return BadRequest("Customer could not register. Are you missing a field?");
+        return result.Equals("User registered successful.") ? Ok(result) : BadRequest(result);
     }
 
-    //Fix this to use email
     [HttpPost("/customers/login")]
     public async Task<IActionResult> LoginCustomer(string email, string password)
     {
-        var customer = await _shopContext.Customers.FirstOrDefaultAsync(c => c.Email.Equals(email) && c.Password.Equals(password));
-        if (customer is not null)
-        {
-            return Ok();
-        }
-        return BadRequest();
+        var result = await _customerRepository.LoginCustomer(email, password);
+
+        return result.Equals("Login successful.") ? Ok(result) : BadRequest(result);
+    }
+
+    [HttpPut("/customers/update/{id}")]
+    public async Task<IActionResult> UpdateCustomer(CustomerDto customer, Guid id)
+    {
+        var result = await _customerRepository.UpdateCustomer(customer, id);
+
+        return result.Equals("User updated successful.") ? Ok(result) : BadRequest(result);
     }
 
     [HttpDelete("/customers/delete/{id}")]
     public async Task<IActionResult> DeleteCustomer(Guid id)
     {
-        var customer = await _shopContext.Customers.FirstOrDefaultAsync(c => c.CustomerId == id);
-        if (customer is null) return BadRequest();
+        var result = await _customerRepository.DeleteCustomer(id);
 
-        _shopContext.Customers.Remove(customer);
-        await _shopContext.SaveChangesAsync();
-        return Ok();
+        return result.Equals("User deleted successful.") ? Ok(result) : BadRequest(result);
     }
 }
