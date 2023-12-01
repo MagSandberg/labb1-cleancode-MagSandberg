@@ -8,7 +8,7 @@ public class CustomerMapperProfile : ICustomerMapperProfile
 {
     public CustomerModel MapToCustomerModel(CustomerDto dto)
     {
-        var model = new CustomerModel(dto.Email, dto.Password, dto.FirstName, dto.LastName);
+        var model = new CustomerModel(dto.Email, dto.Password, dto.FirstName, dto.LastName, dto.Id);
         return model;
     }
 

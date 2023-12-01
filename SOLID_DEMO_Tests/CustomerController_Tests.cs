@@ -23,6 +23,7 @@ public class CustomerController_Tests
 
     private static readonly CustomerController _customerController = new CustomerController(_customerRepository);
 
+
     [Fact]
     public async Task CustomerController_GetCustomers_Return_Ok()
     {
@@ -50,5 +51,181 @@ public class CustomerController_Tests
 
         // Assert
         Assert.IsType<NotFoundObjectResult>(result);
+    }
+
+    [Fact]
+    public async Task CustomerController_GetCustomerByEmail_Return_Ok()
+    {
+        // Arrange
+        var sut = _customerController;
+
+        var customers = await _customerRepository.GetCustomers();
+        var customerEmail = customers[0].Email;
+
+        // Act
+        var result = await sut.GetCustomerByEmail(customerEmail);
+
+        // Assert
+        Assert.IsType<OkObjectResult>(result);
+    }
+
+    [Fact]
+    public async Task CustomerController_GetCustomerByEmail_Return_NotFound()
+    {
+        // Arrange
+        var sut = _customerController;
+
+        // Act
+        var result = await sut.GetCustomerByEmail("customerEmail");
+
+        // Assert
+        Assert.IsType<OkObjectResult>(result);
+    }
+
+    [Fact]
+    public async Task CustomerController_RegisterUser_Return_Ok()
+    {
+
+        // Arrange
+        var sut = _customerController;
+
+        var customerDto = new CustomerDto("customer@email.com", "123123123", "Jezzica", "Bäldt", Guid.NewGuid());
+
+        // Act
+        var result = await sut.RegisterUser(customerDto);
+
+        // Assert
+        Assert.IsType<OkObjectResult>(result);
+        var okObjectResult = (OkObjectResult)result;
+
+        var statusCode = okObjectResult.StatusCode;
+        var value = okObjectResult.Value;
+
+        Assert.Equal("User registered successful.", value);
+        Assert.Equal(200, statusCode);
+    }
+
+    [Fact]
+    public async Task CustomerController_RegisterUser_Return_BadRequest()
+    {
+        // Arrange
+        var sut = _customerController;
+
+        var customerDto = new CustomerDto("customerEmail", "123123123", "Jezzica", "Bäldt", Guid.NewGuid());
+
+        // Act
+        var result = await sut.RegisterUser(customerDto);
+
+        // Assert
+        Assert.IsType<BadRequestObjectResult>(result);
+        var badRequestObjectResult = (BadRequestObjectResult)result;
+
+        var statusCode = badRequestObjectResult.StatusCode;
+        var value = badRequestObjectResult.Value;
+
+        Assert.Equal("Invalid email address.", value);
+        Assert.Equal(400, statusCode);
+    }
+
+    [Fact]
+    public async Task CustomerController_LoginCustomer_Return_Ok()
+    {
+        // Arrange
+        var sut = _customerController;
+
+        var customers = await _customerRepository.GetCustomers();
+        var customerEmail = customers[0].Email;
+        var customerPassword = customers[0].Password;
+
+        // Act
+        var result = await sut.LoginCustomer(customerEmail, customerPassword);
+
+        // Assert
+        Assert.IsType<OkObjectResult>(result);
+        var okObjectResult = (OkObjectResult)result;
+
+        var statusCode = okObjectResult.StatusCode;
+        var value = okObjectResult.Value;
+
+        Assert.Equal("Login successful.", value);
+        Assert.Equal(200, statusCode);
+    }
+
+    [Fact]
+    public async Task CustomerController_LoginCustomer_Return_BadRequest()
+    {
+        // Arrange
+        var sut = _customerController;
+
+        // Act
+        var result = await sut.LoginCustomer("customerEmail", "customerPassword");
+
+        // Assert
+        Assert.IsType<BadRequestObjectResult>(result);
+    }
+
+    [Fact]
+    public async Task CustomerController_UpdateCustomer_Return_Ok()
+    {
+        // Arrange
+        var sut = _customerController;
+
+        var customers = await _customerRepository.GetCustomers();
+        var customer = customers[0];
+
+        var updatedCustomer = new CustomerDto(customer.Email, customer.Password, "Johan", "Falk", customer.Id);
+
+        // Act
+        var result = await sut.UpdateCustomer(updatedCustomer, customer.Id);
+
+        // Assert
+        Assert.IsType<OkObjectResult>(result);
+    }
+
+    [Fact]
+    public async Task CustomerController_UpdateCustomer_Return_BadRequest()
+    {
+        // Arrange
+        var sut = _customerController;
+
+        var customers = await _customerRepository.GetCustomers();
+        var customer = customers[0];
+
+        var updatedCustomer = new CustomerDto(customer.Email, customer.Password, "Johan", "Falk", customer.Id);
+
+        // Act
+        var result = await sut.UpdateCustomer(updatedCustomer, Guid.NewGuid());
+
+        // Assert
+        Assert.IsType<BadRequestObjectResult>(result);
+    }
+
+    [Fact]
+    public async Task CustomerController_DeleteCustomer_Return_Ok()
+    {
+        // Arrange
+        var sut = _customerController;
+
+        var customers = await _customerRepository.GetCustomers();
+        var customer = customers[0];
+
+        // Act
+        var result = await sut.DeleteCustomer(customer.Id);
+
+        // Assert
+        Assert.IsType<OkObjectResult>(result);
+    }
+
+    [Fact]
+    public async Task CustomerController_DeleteCustomer_Return_BadRequest()
+    {
+        // Arrange
+        var sut = _customerController;
+
+        // Act
+        var result = await sut.DeleteCustomer(Guid.NewGuid());
+
+        // Assert
+        Assert.IsType<BadRequestObjectResult>(result);
     }
 }

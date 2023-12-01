@@ -20,12 +20,13 @@ namespace DataAccess.Models
         [MinLength(8), MaxLength(50), Required]
         public string Password { get; set; }
 
-        public CustomerModel(string email, string password, string firstName, string lastName)
+        public CustomerModel(string email, string password, string firstName, string lastName, Guid customerId)
         {
             Email = email;
             Password = password;
             FirstName = firstName;
             LastName = lastName;
+            CustomerId = customerId;
         }
     }
 }

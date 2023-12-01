@@ -41,6 +41,8 @@ public class UnitOfWorkCustomer : IUnitOfWorkCustomer
         var customerExists = await _shopContext.Customers.FirstOrDefaultAsync(c => c.Email.Equals(customer.Email));
         if (customerExists is not null) return "User already exists.";
 
+        if (!customer.Email.Contains('@')) return "Invalid email address.";
+
         await _shopContext.Customers.AddAsync(_customerMapper!.MapToCustomerModel(customer));
         var result = await _shopContext.SaveChangesAsync();
 
@@ -49,10 +51,19 @@ public class UnitOfWorkCustomer : IUnitOfWorkCustomer
 
     public async Task<string> UpdateCustomer(CustomerDto customer, Guid id)
     {
-        var customerToUpdate = await _shopContext.Customers.FirstOrDefaultAsync(c => c.CustomerId.Equals(id));
+        var customerToUpdate = await _shopContext.Customers.FirstOrDefaultAsync(c => c.CustomerId.Equals(id)); 
+        
+        if (customerToUpdate == null) return "Customer does not exist.";
+        if (customerToUpdate.CustomerId.Equals(Guid.Empty)) return "Customer Id does not exist.";
+
+        if (customerToUpdate.FirstName.Equals(customer.FirstName) &&
+             customerToUpdate.LastName.Equals(customer.LastName) &&
+             customerToUpdate.Email.Equals(customer.Email) &&
+             customerToUpdate.Password.Equals(customer.Password))
+            return "No changes made.";
 
         if (_customerMapper != null) customerToUpdate = _customerMapper.MapToCustomerModel(customer);
-        if (customerToUpdate != null) _shopContext.Customers.Update(customerToUpdate);
+        _shopContext.Customers.Update(customerToUpdate);
 
         var result = await _shopContext.SaveChangesAsync();
 
@@ -69,7 +80,7 @@ public class UnitOfWorkCustomer : IUnitOfWorkCustomer
     public async Task<string> DeleteCustomer(Guid id)
     {
         var customerToDelete = await _shopContext.Customers.FirstOrDefaultAsync(c => c.CustomerId.Equals(id));
-        
+
         if (customerToDelete == null) return "Customer does not exist.";
 
         _shopContext.Customers.Remove(customerToDelete);
