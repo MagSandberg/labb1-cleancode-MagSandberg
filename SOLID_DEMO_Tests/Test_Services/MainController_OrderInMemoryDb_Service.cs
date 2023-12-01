@@ -11,10 +11,10 @@ public class MainController_OrderInMemoryDb_Service
 {
     private readonly MainController _mainController;
 
-    public MainController_OrderInMemoryDb_Service()
-    {
-        _mainController = new MainController(IMainControllerWithShopContext._shopContext);
-    }
+    //public MainController_OrderInMemoryDb_Service()
+    //{
+    //    _mainController = new MainController(IMainControllerWithShopContext._shopContext);
+    //}
 
     //public async Task<MainController> OrderInMemoryDatabase()
     //{

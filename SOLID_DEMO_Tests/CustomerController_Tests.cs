@@ -1,39 +1,54 @@
-﻿using DataAccess.Models;
-using DataAccess.Repositories;
+﻿using DataAccess.Repositories;
 using DataAccess.Repositories.Interfaces;
 using DataAccess.Services.Mapping;
 using DataAccess.Services.Mapping.Interfaces;
+using DataAccess.UnitOfWork;
+using DataAccess.UnitOfWork.Interfaces;
+using FakeItEasy;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Server.Controllers;
-using Server.DataAccess;
+using Shared.DTOs;
+using SOLID_DEMO_Tests.Test_Services;
 
 namespace SOLID_DEMO_Tests;
 
 public class CustomerController_Tests
 {
-    //private readonly ShopContext _shopContext;
-    //private readonly ICustomerMapperProfile _customerMapper = new CustomerMapperProfile();
+    private static readonly ICustomerMapperProfile _customerMapperProfile = new CustomerMapperProfile();
 
-    //public CustomerController_Tests(ShopContext shopContext)
-    //{
-    //    _shopContext = shopContext;
-    //}
+    private static readonly ShopContext_With_CustomerInMemoryDbService _customerInMemoryDbService = new ShopContext_With_CustomerInMemoryDbService();
+    private static readonly IUnitOfWorkCustomer _unitOfWork = new UnitOfWorkCustomer(_customerInMemoryDbService.CustomerInMemoryDb().Result, _customerMapperProfile);
 
-    //[Fact]
-    //public async Task CustomerController_RegisterUser_Return_Ok()
-    //{
-    //    // Arrange
-    //    var repository = new CustomerRepository(_shopContext, _customerMapper);
+    private static readonly ICustomerRepository _customerRepository = new CustomerRepository(_unitOfWork);
 
-    //    var sut = new CustomerController(_shopContext, repository);
-    //    var customer = new CustomerModel("magnus@email.com", "123123123", "Magnus", "Sandberg");
+    private static readonly CustomerController _customerController = new CustomerController(_customerRepository);
 
-    //    // Act
+    [Fact]
+    public async Task CustomerController_GetCustomers_Return_Ok()
+    {
+        // Arrange
+        var sut = _customerController;
 
-    //    var result = await sut.RegisterUser(_customerMapper.MapToCustomerDto(customer));
+        // Act
 
-    //    // Assert
-    //    Assert.IsType<OkResult>(result);
-    //}
+        var result = await sut.GetCustomers();
+
+        // Assert
+
+        Assert.IsType<OkObjectResult>(result);
+    }
+
+    [Fact]
+    public async Task CustomerController_GetCustomers_Return_NotFound()
+    {
+        // Arrange
+        var fakeCustomerRepository = A.Fake<ICustomerRepository>();
+        var sut = new CustomerController(fakeCustomerRepository);
+
+        // Act
+        var result = await sut.GetCustomers();
+
+        // Assert
+        Assert.IsType<NotFoundObjectResult>(result);
+    }
 }

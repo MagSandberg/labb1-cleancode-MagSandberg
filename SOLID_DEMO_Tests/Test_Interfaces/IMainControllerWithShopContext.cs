@@ -7,18 +7,18 @@ namespace SOLID_DEMO_Tests.Test_Interfaces;
 
 public interface IMainControllerWithShopContext
 {
-    public static DbContextOptions _options = new DbContextOptionsBuilder<ShopContext>()
-        .UseInMemoryDatabase(databaseName: "InMemoryDb")
-        .Options;
-    public static ShopContext _shopContext = new ShopContext(_options);
-    public static MainController _mainController = new MainController(_shopContext);
+    //public static DbContextOptions _options = new DbContextOptionsBuilder<ShopContext>()
+    //    .UseInMemoryDatabase(databaseName: "InMemoryDb")
+    //    .Options;
+    //public static ShopContext _shopContext = new ShopContext(_options);
+    //public static MainController _mainController = new MainController(_shopContext);
 
-    public static MainController_CustomerInMemoryDb_Service _customerInMemoryDb = new MainController_CustomerInMemoryDb_Service();
+    //public static MainController _customerInMemoryDb = new MainController_CustomerInMemoryDb_Service(_shopContext);
 
-    public static async Task<MainController> CustomerInMemoryDb()
-    {
-        return await _customerInMemoryDb.CustomerInMemoryDb();
-    }
+    //public static async Task<MainController> CustomerInMemoryDb()
+    //{
+    //    return await _customerInMemoryDb.CustomerInMemoryDb();
+    //}
 
     //public static async Task<MainController> ProductInMemoryDb()
     //{
