@@ -42,6 +42,7 @@ public class CustomerController : ControllerBase
         var result = await _customerRepository.RegisterUser(customerDto);
 
         if (!result.Equals("User registered successful.")) return BadRequest(result); 
+
         return Ok(result);
     }
 

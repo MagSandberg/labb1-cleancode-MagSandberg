@@ -15,9 +15,14 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
 builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
 builder.Services.AddScoped<ICustomerMapperProfile, CustomerMapperProfile>();
 builder.Services.AddScoped<IUnitOfWorkCustomer, UnitOfWorkCustomer>();
+
+builder.Services.AddScoped<IProductRespository, ProductRepository>();
+builder.Services.AddScoped<IProductMapperProfiles, ProductMapperProfile>();
+builder.Services.AddScoped<IUnitOfWorkProduct, UnitOfWorkProduct>();
 
 builder.Services.AddDbContext<ShopContext>(options =>
 {
