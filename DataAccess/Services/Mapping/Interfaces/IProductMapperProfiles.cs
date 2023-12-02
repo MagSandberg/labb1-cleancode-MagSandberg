@@ -1,7 +1,10 @@
-﻿namespace DataAccess.Services.Mapping.Interfaces;
+﻿using DataAccess.Models;
+using Shared.DTOs;
+
+namespace DataAccess.Services.Mapping.Interfaces;
 
 public interface IProductMapperProfiles
 {
-    //public ProductModel MapToCustomerModel(ProductDto dto);
-    //public ProductDto MapToCustomerDto(ProductModel model);
+    public ProductModel MapToProductModel(ProductDto dto);
+    public ProductDto MapToProductDto(ProductModel model);
 }
