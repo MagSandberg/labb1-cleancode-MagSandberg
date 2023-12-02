@@ -41,8 +41,7 @@ public class CustomerController : ControllerBase
     {
         var result = await _customerRepository.RegisterUser(customerDto);
 
-        if (!result.Equals("User registered successful.")) return BadRequest(result);
-
+        if (!result.Equals("User registered successful.")) return BadRequest(result); 
         return Ok(result);
     }
 
@@ -54,7 +53,7 @@ public class CustomerController : ControllerBase
         return result.Equals("Login successful.") ? Ok(result) : BadRequest(result);
     }
 
-    [HttpPut("/customers/update/{id}")]
+    [HttpPatch("/customers/update/{id}")]
     public async Task<IActionResult> UpdateCustomer(CustomerDto customer, Guid id)
     {
         var result = await _customerRepository.UpdateCustomer(customer, id);
@@ -69,6 +68,6 @@ public class CustomerController : ControllerBase
     {
         var result = await _customerRepository.DeleteCustomer(id);
 
-        return result.Equals("User deleted successful.") ? Ok(result) : BadRequest(result);
+        return result.Equals("User removed successful.") ? Ok(result) : BadRequest(result);
     }
 }

@@ -39,8 +39,8 @@ public class UnitOfWorkCustomer : IUnitOfWorkCustomer
     public async Task<string> RegisterUser(CustomerDto customer)
     {
         var customerExists = await _shopContext.Customers.FirstOrDefaultAsync(c => c.Email.Equals(customer.Email));
+        
         if (customerExists is not null) return "User already exists.";
-
         if (!customer.Email.Contains('@')) return "Invalid email address.";
 
         await _shopContext.Customers.AddAsync(_customerMapper!.MapToCustomerModel(customer));
@@ -62,8 +62,10 @@ public class UnitOfWorkCustomer : IUnitOfWorkCustomer
              customerToUpdate.Password.Equals(customer.Password))
             return "No changes made.";
 
-        if (_customerMapper != null) customerToUpdate = _customerMapper.MapToCustomerModel(customer);
-        _shopContext.Customers.Update(customerToUpdate);
+        customerToUpdate.FirstName = customer.FirstName;
+        customerToUpdate.LastName = customer.LastName;
+        customerToUpdate.Email = customer.Email;
+        customerToUpdate.Password = customer.Password;
 
         var result = await _shopContext.SaveChangesAsync();
 
@@ -81,7 +83,7 @@ public class UnitOfWorkCustomer : IUnitOfWorkCustomer
     {
         var customerToDelete = await _shopContext.Customers.FirstOrDefaultAsync(c => c.CustomerId.Equals(id));
 
-        if (customerToDelete == null) return "Customer does not exist.";
+        if (customerToDelete == null) return "The ID provided does not exist.";
 
         _shopContext.Customers.Remove(customerToDelete);
         var result = await _shopContext.SaveChangesAsync();

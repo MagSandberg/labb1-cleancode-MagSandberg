@@ -89,10 +89,15 @@ public class CustomerController_Tests
         // Arrange
         var sut = _customerController;
 
-        var customerDto = new CustomerDto("customer@email.com", "123123123", "Jezzica", "Bäldt", Guid.NewGuid());
-
         // Act
-        var result = await sut.RegisterUser(customerDto);
+        var result = await sut.RegisterUser(
+            new CustomerDto(
+                "customer@email.com", 
+                "123123123", 
+                "Jezzica", 
+                "Bäldt", 
+                Guid.NewGuid())
+            );
 
         // Assert
         Assert.IsType<OkObjectResult>(result);
@@ -142,13 +147,11 @@ public class CustomerController_Tests
 
         // Assert
         Assert.IsType<OkObjectResult>(result);
-        var okObjectResult = (OkObjectResult)result;
 
-        var statusCode = okObjectResult.StatusCode;
+        var okObjectResult = (OkObjectResult)result;
         var value = okObjectResult.Value;
 
         Assert.Equal("Login successful.", value);
-        Assert.Equal(200, statusCode);
     }
 
     [Fact]
@@ -162,6 +165,11 @@ public class CustomerController_Tests
 
         // Assert
         Assert.IsType<BadRequestObjectResult>(result);
+
+        var badRequestObjectResult = (BadRequestObjectResult)result;
+        var value = badRequestObjectResult.Value;
+
+        Assert.Equal("Invalid email or password.", value);
     }
 
     [Fact]
@@ -214,6 +222,11 @@ public class CustomerController_Tests
 
         // Assert
         Assert.IsType<OkObjectResult>(result);
+
+        var okObjectResult = (OkObjectResult)result;
+        var value = okObjectResult.Value;
+
+        Assert.Equal("User removed successful.", value);
     }
 
     [Fact]
@@ -227,5 +240,10 @@ public class CustomerController_Tests
 
         // Assert
         Assert.IsType<BadRequestObjectResult>(result);
+
+        var badRequestObjectResult = (BadRequestObjectResult)result;
+        var value = badRequestObjectResult.Value;
+
+        Assert.Equal("The ID provided does not exist.", value);
     }
 }
