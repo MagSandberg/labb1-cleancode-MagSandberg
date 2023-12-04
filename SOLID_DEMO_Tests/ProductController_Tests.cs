@@ -40,6 +40,20 @@ public class ProductController_Tests
     }
 
     [Fact]
+    public async Task ProductController_GetProducts_Return_NotFound()
+    {
+        // Arrange
+        var fakeProductRepository = A.Fake<IProductRepository>();
+        var sut = new ProductController(fakeProductRepository);
+
+        // Act
+        var result = await sut.GetProducts();
+
+        // Assert
+        Assert.IsType<NotFoundObjectResult>(result);
+    }
+
+    [Fact]
     public async Task ProductController_GetProduct_Return_Ok()
     {
         // Arrange
@@ -75,7 +89,7 @@ public class ProductController_Tests
         var sut = _productController;
 
         // Act
-        var result = await sut.AddProduct( new ProductDto( Guid.NewGuid(), "AddProduct", 100, "Product description"));
+        var result = await sut.AddProduct( new ProductDto(Guid.NewGuid(), "AddProduct", 100, "Product description", new List<OrderProductDto>()));
 
         // Assert
         Assert.IsType<OkObjectResult>(result);
@@ -92,11 +106,11 @@ public class ProductController_Tests
         // Arrange
         var sut = _productController;
 
-        var oldProduct = new ProductDto(Guid.NewGuid(), "Mouse", 100, "Product description");
-        var newProduct = new ProductDto(Guid.NewGuid(), "Mouse", 100, "Product description");
+        var oldProduct = new ProductDto(Guid.NewGuid(), "Mouse", 100, "Product description", new List<OrderProductDto>());
+        var newProduct = new ProductDto(Guid.NewGuid(), "Mouse", 100, "Product description", new List<OrderProductDto>());
 
         var addProduct = await sut.AddProduct(oldProduct);
-
+        
         // Act
         var result = await sut.AddProduct(newProduct);
 
@@ -118,8 +132,10 @@ public class ProductController_Tests
         var products = await _productRepository.GetProducts();
         var productId = products[0].Id;
 
+        var updatedProduct = new ProductDto(productId, "Updated Product", 100, "Product description", new List<OrderProductDto>());
+
         // Act
-        var result = await sut.UpdateProduct(new ProductDto(productId, "UpdateProduct", 100, "Product description"));
+        var result = await sut.UpdateProduct(updatedProduct, productId);
 
         // Assert
         Assert.IsType<OkObjectResult>(result);
@@ -131,11 +147,18 @@ public class ProductController_Tests
         // Arrange
         var sut = _productController;
 
+        var updatedProduct = new ProductDto(Guid.NewGuid(), "Updated Product", 100, "Product description", new List<OrderProductDto>());
+
         // Act
-        var result = await sut.UpdateProduct(new ProductDto(Guid.NewGuid(), "BadRequestProduct", 100, "Product description"));
+        var result = await sut.UpdateProduct(updatedProduct, Guid.NewGuid());
 
         // Assert
         Assert.IsType<BadRequestObjectResult>(result);
+
+        var badRequestObjectResult = (BadRequestObjectResult)result;
+        var value = badRequestObjectResult.Value;
+
+        Assert.Equal("Product does not exist.", value);
     }
 
     [Fact]
@@ -144,7 +167,7 @@ public class ProductController_Tests
         // Arrange
         var sut = _productController;
 
-        var newProduct = new ProductDto(Guid.NewGuid(), "New Product", 100, "Product description");
+        var newProduct = new ProductDto(Guid.NewGuid(), "New Product", 100, "Product description", new List<OrderProductDto>());
         await sut.AddProduct(newProduct);
 
         var productToDelete = await _productRepository.GetProduct(newProduct.Id);

@@ -92,12 +92,13 @@ public class CustomerController_Tests
         // Act
         var result = await sut.RegisterUser(
             new CustomerDto(
-                "customer@email.com", 
+                Guid.NewGuid(),
+                "Firstname", 
+                "Lastname", 
+                "first@last.com", 
                 "123123123", 
-                "Jezzica", 
-                "Bäldt", 
-                Guid.NewGuid())
-            );
+                new List<OrderDto>()
+                )); ;
 
         // Assert
         Assert.IsType<OkObjectResult>(result);
@@ -116,7 +117,7 @@ public class CustomerController_Tests
         // Arrange
         var sut = _customerController;
 
-        var customerDto = new CustomerDto("customerEmail", "123123123", "Jezzica", "Bäldt", Guid.NewGuid());
+        var customerDto = new CustomerDto(Guid.NewGuid(), "Aname", "Alastname", "wrongemail", "123123123", new List<OrderDto>());
 
         // Act
         var result = await sut.RegisterUser(customerDto);
@@ -181,7 +182,7 @@ public class CustomerController_Tests
         var customers = await _customerRepository.GetCustomers();
         var customer = customers[0];
 
-        var updatedCustomer = new CustomerDto(customer.Email, customer.Password, "Johan", "Falk", customer.Id);
+        var updatedCustomer = new CustomerDto(Guid.NewGuid(), "Johan", "Falk", customer.Email, customer.Password, new List<OrderDto>());
 
         // Act
         var result = await sut.UpdateCustomer(updatedCustomer, customer.Id);
@@ -199,7 +200,7 @@ public class CustomerController_Tests
         var customers = await _customerRepository.GetCustomers();
         var customer = customers[0];
 
-        var updatedCustomer = new CustomerDto(customer.Email, customer.Password, "Johan", "Falk", customer.Id);
+        var updatedCustomer = new CustomerDto(Guid.NewGuid(), "Johan", "Falk", customer.Email, customer.Password, new List<OrderDto>());
 
         // Act
         var result = await sut.UpdateCustomer(updatedCustomer, Guid.NewGuid());

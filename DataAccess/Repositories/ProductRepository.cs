@@ -34,9 +34,9 @@ public class ProductRepository : IProductRepository
         return result;
     }
 
-    public async Task<ProductDto> UpdateProduct(ProductDto product)
+    public async Task<string> UpdateProduct(ProductDto product, Guid id)
     {
-        var result = await _unitOfWorkProduct.UpdateProduct(product);
+        var result = await _unitOfWorkProduct.UpdateProduct(product, id);
 
         return result;
     }

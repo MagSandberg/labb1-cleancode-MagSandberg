@@ -1,4 +1,4 @@
-﻿namespace Shared;
+﻿namespace DataAccess.Models;
 
 public class CustomerCart
 {

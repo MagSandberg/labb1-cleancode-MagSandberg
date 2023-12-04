@@ -1,3 +1,4 @@
+using DataAccess.Contexts;
 using DataAccess.Repositories;
 using DataAccess.Repositories.Interfaces;
 using DataAccess.Services.Mapping;
@@ -5,7 +6,6 @@ using DataAccess.Services.Mapping.Interfaces;
 using DataAccess.UnitOfWork;
 using DataAccess.UnitOfWork.Interfaces;
 using Microsoft.EntityFrameworkCore;
-using Server.DataAccess;
 
 var builder = WebApplication.CreateBuilder(args);
 

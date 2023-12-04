@@ -47,11 +47,11 @@ public class ProductController : ControllerBase
     }
 
     [HttpPut("/products/update")]
-    public async Task<IActionResult> UpdateProduct(ProductDto productDto)
+    public async Task<IActionResult> UpdateProduct(ProductDto productDto, Guid id)
     {
-        var result = await _productRepository.UpdateProduct(productDto);
+        var result = await _productRepository.UpdateProduct(productDto, id);
 
-        if (result.Name.Equals("Product does not exist.")) return BadRequest(result);
+        if (result.Equals("Product does not exist.")) return BadRequest(result);
 
         return Ok(result);
     }

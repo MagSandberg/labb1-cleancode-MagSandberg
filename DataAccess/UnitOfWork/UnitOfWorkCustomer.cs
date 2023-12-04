@@ -1,7 +1,7 @@
-﻿using DataAccess.Services.Mapping.Interfaces;
+﻿using DataAccess.Contexts;
+using DataAccess.Services.Mapping.Interfaces;
 using DataAccess.UnitOfWork.Interfaces;
 using Microsoft.EntityFrameworkCore;
-using Server.DataAccess;
 using Shared.DTOs;
 
 namespace DataAccess.UnitOfWork;
@@ -30,7 +30,7 @@ public class UnitOfWorkCustomer : IUnitOfWorkCustomer
 
         if (customer == null)
         {
-            return new CustomerDto(email, "Customer does not exist", "***", "***", Guid.Empty);
+            return new CustomerDto(Guid.Empty, "Customer does not exist.", "", "", "", new List<OrderDto>());
         }
 
         return _customerMapper!.MapToCustomerDto(customer);

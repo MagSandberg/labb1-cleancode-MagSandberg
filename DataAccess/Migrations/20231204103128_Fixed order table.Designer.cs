@@ -3,15 +3,17 @@ using System;
 using DataAccess.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
 namespace SOLIDDEMO.Migrations
 {
     [DbContext(typeof(ShopContext))]
-    [Migration("20231129090221_removedAlternateKeyCustomer")]
-    partial class removedAlternateKeyCustomer
+    [Migration("20231204103128_Fixed order table")]
+    partial class Fixedordertable
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -54,34 +56,29 @@ namespace SOLIDDEMO.Migrations
                     b.ToTable("Customers");
                 });
 
-            modelBuilder.Entity("Shared.Order", b =>
+            modelBuilder.Entity("DataAccess.Models.OrderModel", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("OrderId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("uniqueidentifier");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<Guid>("CustomerModelCustomerId")
+                    b.Property<Guid>("CustomerId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("ShippingDate")
                         .HasColumnType("datetime2");
 
-                    b.HasKey("Id");
-
-                    b.HasIndex("CustomerModelCustomerId");
+                    b.HasKey("OrderId")
+                        .HasName("PK_Orders");
 
                     b.ToTable("Orders");
                 });
 
-            modelBuilder.Entity("Shared.Product", b =>
+            modelBuilder.Entity("DataAccess.Models.ProductModel", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("ProductId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -89,37 +86,31 @@ namespace SOLIDDEMO.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
-                    b.Property<int?>("OrderId")
-                        .HasColumnType("int");
+                    b.Property<Guid?>("OrderModelOrderId")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.HasKey("Id");
+                    b.Property<double>("Price")
+                        .HasColumnType("float");
 
-                    b.HasIndex("OrderId");
+                    b.HasKey("ProductId")
+                        .HasName("PK_Products");
+
+                    b.HasIndex("OrderModelOrderId");
 
                     b.ToTable("Products");
                 });
 
-            modelBuilder.Entity("Shared.Order", b =>
+            modelBuilder.Entity("DataAccess.Models.ProductModel", b =>
                 {
-                    b.HasOne("DataAccess.Models.CustomerModel", "CustomerModel")
-                        .WithMany()
-                        .HasForeignKey("CustomerModelCustomerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("CustomerModel");
-                });
-
-            modelBuilder.Entity("Shared.Product", b =>
-                {
-                    b.HasOne("Shared.Order", null)
+                    b.HasOne("DataAccess.Models.OrderModel", null)
                         .WithMany("Products")
-                        .HasForeignKey("OrderId");
+                        .HasForeignKey("OrderModelOrderId");
                 });
 
-            modelBuilder.Entity("Shared.Order", b =>
+            modelBuilder.Entity("DataAccess.Models.OrderModel", b =>
                 {
                     b.Navigation("Products");
                 });

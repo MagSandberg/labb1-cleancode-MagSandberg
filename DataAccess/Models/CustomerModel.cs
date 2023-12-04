@@ -9,10 +9,10 @@ namespace DataAccess.Models
         public Guid CustomerId { get; set; }
 
         [MaxLength(50), Required]
-        public string FirstName { get; set; } = string.Empty;
+        public string FirstName { get; set; }
 
         [MaxLength(50), Required]
-        public string LastName { get; set; } = string.Empty;
+        public string LastName { get; set; }
 
         [EmailAddress, Required]
         public string Email { get; set; }
@@ -20,13 +20,22 @@ namespace DataAccess.Models
         [MinLength(8), MaxLength(50), Required]
         public string Password { get; set; }
 
-        public CustomerModel(string email, string password, string firstName, string lastName, Guid customerId)
+        public ICollection<OrderModel> Orders { get; set; }
+
+
+        public CustomerModel()
         {
-            Email = email;
-            Password = password;
+            
+        }
+
+        public CustomerModel(Guid id, string firstName, string lastName, string email, string password, ICollection<OrderModel> orders)
+        {
+            CustomerId = id;
             FirstName = firstName;
             LastName = lastName;
-            CustomerId = customerId;
+            Email = email;
+            Password = password;
+            Orders = orders;
         }
     }
 }

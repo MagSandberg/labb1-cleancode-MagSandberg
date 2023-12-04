@@ -8,13 +8,15 @@ public class CustomerMapperProfile : ICustomerMapperProfile
 {
     public CustomerModel MapToCustomerModel(CustomerDto dto)
     {
-        var model = new CustomerModel(dto.Email, dto.Password, dto.FirstName, dto.LastName, dto.Id);
+        var model = new CustomerModel(dto.Id, dto.FirstName, dto.LastName, dto.Email, dto.Password, new List<OrderModel>());
+
         return model;
     }
 
     public CustomerDto MapToCustomerDto(CustomerModel model)
     {
-        var dto = new CustomerDto(model.Email, model.Password, model.FirstName, model.LastName, model.CustomerId);
+        var dto = new CustomerDto(model.CustomerId, model.FirstName, model.LastName, model.Email, model.Password, new List<OrderDto>());
+
         return dto;
     }
 }

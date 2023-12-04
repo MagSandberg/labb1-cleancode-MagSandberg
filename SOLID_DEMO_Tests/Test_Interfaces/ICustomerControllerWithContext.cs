@@ -1,4 +1,5 @@
-﻿using DataAccess.Repositories;
+﻿using DataAccess.Contexts;
+using DataAccess.Repositories;
 using DataAccess.Repositories.Interfaces;
 using DataAccess.Services.Mapping;
 using DataAccess.Services.Mapping.Interfaces;
@@ -6,7 +7,6 @@ using DataAccess.UnitOfWork;
 using DataAccess.UnitOfWork.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Server.Controllers;
-using Server.DataAccess;
 
 namespace SOLID_DEMO_Tests.Test_Interfaces;
 
