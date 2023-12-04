@@ -22,6 +22,11 @@ public class UnitOfWorkProduct : IUnitOfWorkProduct
     {
         var products = await _shopContext.Products.ToListAsync();
 
+        if (products.Count == 0)
+        {
+            return new List<ProductDto>();
+        }
+
         return products.Select(product => _productMapper.MapToProductDto(product)).ToList();
     }
 
@@ -47,5 +52,30 @@ public class UnitOfWorkProduct : IUnitOfWorkProduct
         var result = await _shopContext.SaveChangesAsync();
 
         return result > 0 ? "Product added successfully." : "Failed to add product.";
+    }
+
+    public async Task<ProductDto> UpdateProduct(ProductDto product)
+    {
+        var productExists = await _shopContext.Products.FirstOrDefaultAsync(p => p.ProductId.Equals(product.Id));
+        if (productExists is null) return new ProductDto(Guid.Empty, "Product does not exist.", 0, "");
+
+        productExists.Name = product.Name;
+        productExists.Price = product.Price;
+        productExists.Description = product.Description;
+
+        var result = await _shopContext.SaveChangesAsync();
+
+        return result > 0 ? _productMapper.MapToProductDto(productExists) : new ProductDto(Guid.Empty, "Failed to update product.", 0, "");
+    }
+
+    public async Task<string> DeleteProduct(Guid id)
+    {
+        var productExists = await _shopContext.Products.FirstOrDefaultAsync(p => p.ProductId.Equals(id));
+        if (productExists is null) return "Product does not exist.";
+
+        _shopContext.Products.Remove(productExists);
+        var result = await _shopContext.SaveChangesAsync();
+
+        return result > 0 ? "Product deleted successfully." : "Failed to delete product.";
     }
 }

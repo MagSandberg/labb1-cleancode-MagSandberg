@@ -8,9 +8,9 @@ namespace Server.Controllers;
 [Route("/api")]
 public class ProductController : ControllerBase
 {
-    private readonly IProductRespository _productRepository;
+    private readonly IProductRepository _productRepository;
 
-    public ProductController(IProductRespository productRepository)
+    public ProductController(IProductRepository productRepository)
     {
         _productRepository = productRepository;
     }
@@ -30,6 +30,9 @@ public class ProductController : ControllerBase
     {
         var product = await _productRepository.GetProduct(id);
 
+        if (product.Id.Equals(Guid.Empty)) return NotFound(product);
+        if (product.Name.Equals("Product does not exist.")) return NotFound(product);
+
         return Ok(product);
     }
 
@@ -39,6 +42,26 @@ public class ProductController : ControllerBase
         var result = await _productRepository.AddProduct(productDto);
 
         if (!result.Equals("Product added successfully.")) return BadRequest(result); 
+
+        return Ok(result);
+    }
+
+    [HttpPut("/products/update")]
+    public async Task<IActionResult> UpdateProduct(ProductDto productDto)
+    {
+        var result = await _productRepository.UpdateProduct(productDto);
+
+        if (result.Name.Equals("Product does not exist.")) return BadRequest(result);
+
+        return Ok(result);
+    }
+
+    [HttpDelete("/products/delete/{id}")]
+    public async Task<IActionResult> DeleteProduct(Guid id)
+    {
+        var result = await _productRepository.DeleteProduct(id);
+
+        if (result.Equals("Product does not exist.")) return BadRequest(result);
 
         return Ok(result);
     }

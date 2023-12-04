@@ -4,7 +4,7 @@ using Shared.DTOs;
 
 namespace DataAccess.Repositories;
 
-public class ProductRepository : IProductRespository
+public class ProductRepository : IProductRepository
 {
     private readonly IUnitOfWorkProduct _unitOfWorkProduct;
 
@@ -30,6 +30,20 @@ public class ProductRepository : IProductRespository
     public async Task<string> AddProduct(ProductDto product)
     {
         var result = await _unitOfWorkProduct.AddProduct(product);
+
+        return result;
+    }
+
+    public async Task<ProductDto> UpdateProduct(ProductDto product)
+    {
+        var result = await _unitOfWorkProduct.UpdateProduct(product);
+
+        return result;
+    }
+
+    public async Task<string> DeleteProduct(Guid id)
+    {
+        var result = await _unitOfWorkProduct.DeleteProduct(id);
 
         return result;
     }
