@@ -9,9 +9,9 @@ namespace DataAccess.UnitOfWork;
 public class UnitOfWorkProduct : IUnitOfWorkProduct
 {
     private readonly ShopContext _shopContext;
-    private readonly IProductMapperProfiles _productMapper;
+    private readonly IProductMapperProfile _productMapper;
 
-    public UnitOfWorkProduct(ShopContext shopContext, IProductMapperProfiles productMapper)
+    public UnitOfWorkProduct(ShopContext shopContext, IProductMapperProfile productMapper)
     {
         _shopContext = shopContext;
         _productMapper = productMapper;

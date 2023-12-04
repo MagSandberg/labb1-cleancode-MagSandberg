@@ -14,10 +14,10 @@ namespace SOLID_DEMO_Tests;
 
 public class ProductController_Tests
 {
-    private static readonly IProductMapperProfiles _productMapperProfile = new ProductMapperProfile();
+    private static readonly IProductMapperProfile ProductMapperProfile = new ProductMapperProfile();
 
     private static readonly ShopContext_With_ProductInMemoryDbService _productInMemoryDbService = new ShopContext_With_ProductInMemoryDbService();
-    private static readonly IUnitOfWorkProduct _unitOfWork = new UnitOfWorkProduct(_productInMemoryDbService.ProductInMemoryDb().Result, _productMapperProfile);
+    private static readonly IUnitOfWorkProduct _unitOfWork = new UnitOfWorkProduct(_productInMemoryDbService.ProductInMemoryDb().Result, ProductMapperProfile);
 
     private static readonly IProductRepository _productRepository = new ProductRepository(_unitOfWork);
 

@@ -10,15 +10,17 @@ public class OrderDto
     public Guid CustomerId { get; set; }
 
     [Required]
-    public List<Guid> ProductIds { get; set; }
-
-    [Required]
     public DateTime ShippingDate { get; set; }
 
-    public OrderDto(Guid customerId, List<Guid> productIds, DateTime date)
+    [Required]
+    public List<OrderProductDto> OrderProducts { get; set; }
+
+
+    public OrderDto(Guid id, Guid customerId, DateTime date, List<OrderProductDto> orderProducts)
     {
+        Id = id;
         CustomerId = customerId;
-        ProductIds = productIds;
         ShippingDate = date;
+        OrderProducts = orderProducts;
     }
 }

@@ -11,10 +11,10 @@ public class OrderModel
     [Required]
     public Guid CustomerId { get; set; }
 
-    public ICollection<OrderProductModel> OrderProducts { get; set; }
-
     [Required]
     public DateTime ShippingDate { get; set; }
+
+    public ICollection<OrderProductModel> OrderProducts { get; set; }
 
 
     public OrderModel()
@@ -22,8 +22,9 @@ public class OrderModel
         
     }
 
-    public OrderModel(Guid customerId, DateTime shippingDate, ICollection<OrderProductModel> orderProducts)
+    public OrderModel(Guid orderId, Guid customerId, DateTime shippingDate, ICollection<OrderProductModel> orderProducts)
     {
+        OrderId = orderId;
         CustomerId = customerId;
         ShippingDate = shippingDate;
         OrderProducts = orderProducts;

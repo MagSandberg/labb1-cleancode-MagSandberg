@@ -21,7 +21,7 @@ builder.Services.AddScoped<ICustomerMapperProfile, CustomerMapperProfile>();
 builder.Services.AddScoped<IUnitOfWorkCustomer, UnitOfWorkCustomer>();
 
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
-builder.Services.AddScoped<IProductMapperProfiles, ProductMapperProfile>();
+builder.Services.AddScoped<IProductMapperProfile, ProductMapperProfile>();
 builder.Services.AddScoped<IUnitOfWorkProduct, UnitOfWorkProduct>();
 
 builder.Services.AddDbContext<ShopContext>(options =>
