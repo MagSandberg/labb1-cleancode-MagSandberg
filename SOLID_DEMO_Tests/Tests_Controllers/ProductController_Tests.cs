@@ -8,9 +8,9 @@ using FakeItEasy;
 using Microsoft.AspNetCore.Mvc;
 using Server.Controllers;
 using Shared.DTOs;
-using SOLID_DEMO_Tests.Test_Services;
+using SOLID_DEMO_Tests.Test_ControllerServices;
 
-namespace SOLID_DEMO_Tests;
+namespace SOLID_DEMO_Tests.Tests_Controllers;
 
 public class ProductController_Tests
 {
@@ -89,7 +89,7 @@ public class ProductController_Tests
         var sut = _productController;
 
         // Act
-        var result = await sut.AddProduct( new ProductDto("AddProduct", 100, "Product description"));
+        var result = await sut.AddProduct(new ProductDto("AddProduct", 100, "Product description"));
 
         // Assert
         Assert.IsType<OkObjectResult>(result);
@@ -110,7 +110,7 @@ public class ProductController_Tests
         var newProduct = new ProductDto("Mouse", 100, "Product description");
 
         var addProduct = await sut.AddProduct(oldProduct);
-        
+
         // Act
         var result = await sut.AddProduct(newProduct);
 

@@ -2,7 +2,7 @@
 using DataAccess.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace SOLID_DEMO_Tests.Test_Services;
+namespace SOLID_DEMO_Tests.Test_ControllerServices;
 
 public class ShopContext_With_ProductInMemoryDbService
 {

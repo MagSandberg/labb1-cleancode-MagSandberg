@@ -78,25 +78,12 @@ public class UnitOfWorkOrder : IUnitOfWorkOrder
 
     public async Task<string> UpdateOrder(OrderDto order, Guid id)
     {
-        var orderExists = await _shopContext.Orders.FirstOrDefaultAsync(o => o.OrderId.Equals(order.Id));
+        var orderExists = await _shopContext.Orders.FirstOrDefaultAsync(o => o.OrderId.Equals(id));
+
         if (orderExists is null) return "Order does not exist.";
 
-        _shopContext.Orders.Update(_orderMapper.MapToOrderModel(order));
-
-        orderExists.CustomerId = order.CustomerId;
         orderExists.ShippingDate = order.ShippingDate;
-
-        var products = new List<CustomerOrderModel>();
-
-        //foreach (var orderProduct in order.OrderProducts)
-        //{
-        //    var product = await _shopContext.Products.FirstOrDefaultAsync(p => p.ProductId.Equals(orderProduct.ProductId));
-        //    if (product is null) return "Product does not exist.";
-
-        //    products.Add(_orderProductMapper.MapToOrderProductModel(orderProduct));
-        //}
-
-        //orderExists.OrderProducts = products;
+        _shopContext.Orders.Update(orderExists);
 
         var result = await _shopContext.SaveChangesAsync();
 

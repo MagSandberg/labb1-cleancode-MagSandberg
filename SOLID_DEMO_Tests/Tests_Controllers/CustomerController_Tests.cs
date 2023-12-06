@@ -8,9 +8,9 @@ using FakeItEasy;
 using Microsoft.AspNetCore.Mvc;
 using Server.Controllers;
 using Shared.DTOs;
-using SOLID_DEMO_Tests.Test_Services;
+using SOLID_DEMO_Tests.Test_ControllerServices;
 
-namespace SOLID_DEMO_Tests;
+namespace SOLID_DEMO_Tests.Tests_Controllers;
 
 public class CustomerController_Tests
 {
@@ -94,7 +94,7 @@ public class CustomerController_Tests
             new CustomerDto(
                 "Firstname",
                 "Lastname",
-                "first@last.com", 
+                "first@last.com",
                 "123123123"
                 )); ;
 

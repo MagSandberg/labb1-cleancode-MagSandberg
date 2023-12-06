@@ -8,10 +8,9 @@ using DataAccess.UnitOfWork.Interfaces;
 using FakeItEasy;
 using Microsoft.AspNetCore.Mvc;
 using Server.Controllers;
-using Shared.DTOs;
-using SOLID_DEMO_Tests.Test_Services;
+using SOLID_DEMO_Tests.Test_ControllerServices;
 
-namespace SOLID_DEMO_Tests;
+namespace SOLID_DEMO_Tests.Tests_Controllers;
 
 public class OrderController_Tests
 {
@@ -140,15 +139,90 @@ public class OrderController_Tests
         var orders = await _orderRepository.GetOrders();
         var orderId = orders[0].Id;
 
-        var newOrder = new OrderModel(Guid.NewGuid(), DateTime.UtcNow, DateTime.UtcNow.AddDays(3)) { OrderId = orderId };
-        newOrder.CustomerOrder.Add(new CustomerOrderModel(Guid.NewGuid(), 1) { Id = Guid.NewGuid(), OrderId = newOrder.OrderId });
+        var orderToUpdate = orders[0];
+        orderToUpdate.ShippingDate = DateTime.UtcNow.AddDays(3);
+
+        var customerOrder = new CustomerOrderModel(Guid.NewGuid(), 1) { Id = Guid.NewGuid(), OrderId = orderToUpdate.Id };
+        orderToUpdate.CustomerOrder.Add(_customerOrderMapper.MapToCustomerOrderDto(customerOrder));
 
         // Act
 
-        var result = await sut.UpdateOrder(_orderMapper.MapToOrderDto(newOrder), orderId);
+        var result = await sut.UpdateOrder(orderToUpdate, orderId);
 
         // Assert
 
         Assert.IsType<OkObjectResult>(result);
+    }
+
+    [Fact]
+    public async Task OrderController_UpdateOrder_Return_BadRequest()
+    {
+        // Arrange
+        var sut = _orderController;
+
+        var orders = await _orderRepository.GetOrders();
+        var orderId = orders[0].Id;
+
+        var orderToUpdate = orders[0];
+        orderToUpdate.ShippingDate = DateTime.UtcNow.AddDays(3);
+
+        var customerOrder = new CustomerOrderModel(Guid.NewGuid(), 1) { Id = Guid.NewGuid(), OrderId = orderToUpdate.Id };
+        orderToUpdate.CustomerOrder.Add(_customerOrderMapper.MapToCustomerOrderDto(customerOrder));
+
+        // Act
+
+        var result = await sut.UpdateOrder(orderToUpdate, Guid.Empty);
+
+        // Assert
+
+        Assert.IsType<BadRequestObjectResult>(result);
+
+        var badRequestObjectResult = (BadRequestObjectResult)result;
+        var value = badRequestObjectResult.Value;
+
+        Assert.Equal("Order does not exist.", value);
+    }
+
+    [Fact]
+    public async Task OrderController_DeleteOrder_Return_Ok()
+    {
+        // Arrange
+        var sut = _orderController;
+
+        var orders = await _orderRepository.GetOrders();
+        var orderId = orders[0].Id;
+
+        // Act
+
+        var result = await sut.DeleteOrder(orderId);
+
+        // Assert
+
+        Assert.IsType<OkObjectResult>(result);
+
+        var okObjectResult = (OkObjectResult)result;
+        var value = okObjectResult.Value;
+
+        Assert.Equal("Order deleted successfully.", value);
+    }
+
+    [Fact]
+    public async Task OrderController_DeleteOrder_Return_BadRequest()
+    {
+        // Arrange
+        var sut = _orderController;
+
+        // Act
+
+        var result = await sut.DeleteOrder(Guid.Empty);
+
+        // Assert
+
+        Assert.IsType<BadRequestObjectResult>(result);
+
+        var badRequestObjectResult = (BadRequestObjectResult)result;
+        var value = badRequestObjectResult.Value;
+
+        Assert.Equal("Order does not exist.", value);
     }
 }
