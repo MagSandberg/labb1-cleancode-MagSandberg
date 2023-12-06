@@ -137,6 +137,31 @@ public class CustomerController_Tests
     }
 
     [Fact]
+    public async Task CustomerController_RegisterUser_Return_BadRequest_UserExists()
+    {
+        // Arrange
+        var sut = _customerController;
+
+        var customers = await _customerRepository.GetCustomers();
+        var customer = customers[0];
+
+        var customerDto = new CustomerDto(customer.FirstName, customer.LastName, customer.Email, customer.Password );
+
+        // Act
+        var result = await sut.RegisterUser(customerDto);
+
+        // Assert
+        Assert.IsType<BadRequestObjectResult>(result);
+        var badRequestObjectResult = (BadRequestObjectResult)result;
+
+        var statusCode = badRequestObjectResult.StatusCode;
+        var value = badRequestObjectResult.Value;
+
+        Assert.Equal("User already exists.", value);
+        Assert.Equal(400, statusCode);
+    }
+
+    [Fact]
     public async Task CustomerController_LoginCustomer_Return_Ok()
     {
         // Arrange

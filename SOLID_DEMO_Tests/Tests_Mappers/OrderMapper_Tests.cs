@@ -40,4 +40,31 @@ public class OrderMapper_Tests
 
         Assert.IsType<OrderDto>(result);
     }
+
+    [Fact]
+    public void OrderMapper_MapToOrderModel_Return_OrderModel_WithExpectedValues()
+    {
+        // Arrange
+
+        var sut = Mapper;
+
+        var orderDto = new OrderDto(Guid.NewGuid(), DateTime.UtcNow, DateTime.UtcNow.AddDays(3));
+        var expectedId = orderDto.Id;
+        var expectedOrderDate = orderDto.CreationTime;
+        var expectedDeliveryDate = orderDto.ShippingDate;
+
+        //Act
+
+        var actualId = orderDto.Id;
+        var actualOrderDate = orderDto.CreationTime;
+        var actualDeliveryDate = orderDto.ShippingDate;
+        var result = sut.MapToOrderModel(new OrderDto(Guid.NewGuid(), DateTime.UtcNow, DateTime.UtcNow.AddDays(3)));
+
+        //Assert
+
+        Assert.IsType<OrderModel>(result);
+        Assert.Equal(expectedId, actualId);
+        Assert.Equal(expectedOrderDate, actualOrderDate);
+        Assert.Equal(expectedDeliveryDate, actualDeliveryDate);
+    }
 }
