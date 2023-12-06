@@ -6,27 +6,23 @@ namespace DataAccess.Models;
 public class OrderModel
 {
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-    public Guid OrderId { get; set; }
+    public Guid OrderId { get; init; }
 
     [Required]
     public Guid CustomerId { get; set; }
 
     [Required]
+    public DateTime CreationTime { get; init; }
+
     public DateTime ShippingDate { get; set; }
 
-    public ICollection<OrderProductModel> OrderProducts { get; set; }
+    public List<CustomerOrderModel> CustomerOrder { get; set; }
 
-
-    public OrderModel()
+    public OrderModel(Guid customerId, DateTime creationTime, DateTime shippingDate)
     {
-        
-    }
-
-    public OrderModel(Guid orderId, Guid customerId, DateTime shippingDate, ICollection<OrderProductModel> orderProducts)
-    {
-        OrderId = orderId;
         CustomerId = customerId;
+        CreationTime = creationTime;
         ShippingDate = shippingDate;
-        OrderProducts = orderProducts;
+        CustomerOrder = new List<CustomerOrderModel>();
     }
 }

@@ -8,7 +8,7 @@ public class ShopContext : DbContext
     public DbSet<CustomerModel> Customers { get; set; }
     public DbSet<ProductModel> Products { get; set; }
     public DbSet<OrderModel> Orders { get; set; }
-    public DbSet<OrderProductModel> OrderProducts { get; set; }
+    public DbSet<CustomerOrderModel> CustomerOrders { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -23,20 +23,10 @@ public class ShopContext : DbContext
         modelBuilder.Entity<OrderModel>(entity =>
         {
             entity.HasKey(e => e.OrderId).HasName("PK_Orders");
+            entity.HasMany(e => e.CustomerOrder)
+                .WithOne(e => e.Order)
+                .HasForeignKey(e => e.OrderId);
         });
-
-        modelBuilder.Entity<OrderProductModel>()
-            .HasKey(op => new { op.OrderProductId });
-
-        modelBuilder.Entity<OrderProductModel>()
-            .HasOne(op => op.Order)
-            .WithMany(o => o.OrderProducts)
-            .HasForeignKey(op => op.OrderId);
-
-        modelBuilder.Entity<OrderProductModel>()
-            .HasOne(op => op.Product)
-            .WithMany(p => p.OrderProducts)
-            .HasForeignKey(op => op.ProductId);
     }
 
     public ShopContext(DbContextOptions options) : base(options)

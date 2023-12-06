@@ -36,7 +36,7 @@ public class UnitOfWorkProduct : IUnitOfWorkProduct
 
         if (product == null)
         {
-            return new ProductDto(Guid.Empty, "Product does not exist.", 0, "", new List<OrderProductDto>());
+            return new ProductDto("Product does not exist.", 0, "");
         }
 
         return _productMapper.MapToProductDto(product);

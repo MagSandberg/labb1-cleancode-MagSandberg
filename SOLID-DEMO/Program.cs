@@ -24,6 +24,13 @@ builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<IProductMapperProfile, ProductMapperProfile>();
 builder.Services.AddScoped<IUnitOfWorkProduct, UnitOfWorkProduct>();
 
+builder.Services.AddScoped<IOrderRepository, OrderRepository>();
+builder.Services.AddScoped<IOrderMapperProfile, OrderMapperProfile>();
+builder.Services.AddScoped<IOrderProductMapperProfile, OrderProductMapperProfile>();
+builder.Services.AddScoped<IUnitOfWorkOrder, UnitOfWorkOrder>();
+
+builder.Services.AddScoped<ICustomerOrderMapper, CustomerOrderMapper>();
+
 builder.Services.AddDbContext<ShopContext>(options =>
 {
     var connectionString = builder.Configuration.GetConnectionString("ShopDb");

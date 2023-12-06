@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Shared.DTOs;
 
@@ -7,20 +8,21 @@ public class OrderDto
     public Guid Id { get; init; }
 
     [Required]
-    public Guid CustomerId { get; set; }
+    public Guid CustomerId { get; }
 
     [Required]
+    public DateTime CreationTime { get; set; }
+
     public DateTime ShippingDate { get; set; }
 
-    [Required]
-    public List<OrderProductDto> OrderProducts { get; set; }
+    public List<CustomerOrderDto> CustomerOrder { get; set; }
 
-
-    public OrderDto(Guid id, Guid customerId, DateTime date, List<OrderProductDto> orderProducts)
+    public OrderDto(Guid customerId, DateTime creationTime, DateTime shippingDate)
     {
-        Id = id;
+        Id = Guid.NewGuid();
         CustomerId = customerId;
-        ShippingDate = date;
-        OrderProducts = orderProducts;
+        CreationTime = creationTime;
+        ShippingDate = shippingDate;
+        CustomerOrder = new List<CustomerOrderDto>();
     }
 }

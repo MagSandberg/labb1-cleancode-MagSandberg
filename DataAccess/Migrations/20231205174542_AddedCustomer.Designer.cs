@@ -4,16 +4,19 @@ using DataAccess.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace Server.Migrations
+namespace SOLIDDEMO.Migrations
 {
     [DbContext(typeof(ShopContext))]
-    partial class UserContextModelSnapshot : ModelSnapshot
+    [Migration("20231205174542_AddedCustomer")]
+    partial class AddedCustomer
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -50,7 +53,7 @@ namespace Server.Migrations
                     b.HasKey("CustomerId")
                         .HasName("PK_Customers");
 
-                    b.ToTable("Customers", (string)null);
+                    b.ToTable("Customers");
                 });
 
             modelBuilder.Entity("DataAccess.Models.CustomerOrderModel", b =>
@@ -59,7 +62,7 @@ namespace Server.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("OrderId")
+                    b.Property<Guid?>("OrderModelOrderId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("ProductId")
@@ -70,9 +73,9 @@ namespace Server.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("OrderId");
+                    b.HasIndex("OrderModelOrderId");
 
-                    b.ToTable("CustomerOrders", (string)null);
+                    b.ToTable("CustomerOrders");
                 });
 
             modelBuilder.Entity("DataAccess.Models.OrderModel", b =>
@@ -93,7 +96,7 @@ namespace Server.Migrations
                     b.HasKey("OrderId")
                         .HasName("PK_Orders");
 
-                    b.ToTable("Orders", (string)null);
+                    b.ToTable("Orders");
                 });
 
             modelBuilder.Entity("DataAccess.Models.ProductModel", b =>
@@ -117,18 +120,14 @@ namespace Server.Migrations
                     b.HasKey("ProductId")
                         .HasName("PK_Products");
 
-                    b.ToTable("Products", (string)null);
+                    b.ToTable("Products");
                 });
 
             modelBuilder.Entity("DataAccess.Models.CustomerOrderModel", b =>
                 {
-                    b.HasOne("DataAccess.Models.OrderModel", "Order")
+                    b.HasOne("DataAccess.Models.OrderModel", null)
                         .WithMany("CustomerOrder")
-                        .HasForeignKey("OrderId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Order");
+                        .HasForeignKey("OrderModelOrderId");
                 });
 
             modelBuilder.Entity("DataAccess.Models.OrderModel", b =>

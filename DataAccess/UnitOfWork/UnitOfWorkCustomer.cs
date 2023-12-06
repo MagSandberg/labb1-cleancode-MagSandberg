@@ -21,16 +21,26 @@ public class UnitOfWorkCustomer : IUnitOfWorkCustomer
     {
         var customers = await _shopContext.Customers.ToListAsync();
 
-        return customers.Select(customer => _customerMapper!.MapToCustomerDto(customer)).ToList();
+        if (customers.Count == 0)
+        {
+            return new List<CustomerDto>();
+        }
+
+        return customers.Select(customer => _customerMapper.MapToCustomerDto(customer)).ToList();
     }
 
     public async Task<CustomerDto> GetCustomerByEmail(string email)
     {
         var customer = await _shopContext.Customers.FirstOrDefaultAsync(c => c.Email.Equals(email));
 
+        if (!email.Contains('@'))
+        {
+            return new CustomerDto("", "", "You forgot the @", "");
+        }
+
         if (customer == null)
         {
-            return new CustomerDto(Guid.Empty, "Customer does not exist.", "", "", "", new List<OrderDto>());
+            return new CustomerDto("", "", "Customer does not exist.", "");
         }
 
         return _customerMapper!.MapToCustomerDto(customer);

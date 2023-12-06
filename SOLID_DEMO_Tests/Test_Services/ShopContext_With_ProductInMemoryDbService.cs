@@ -16,9 +16,9 @@ public class ShopContext_With_ProductInMemoryDbService
         await _shopContext.Database.EnsureDeletedAsync();
         await _shopContext.Database.EnsureCreatedAsync();
 
-        var prodOne = new ProductModel(Guid.NewGuid(), "Mouse", 2.24, "Mouse description", new List<OrderProductModel>());
-        var prodTwo = new ProductModel(Guid.NewGuid(), "Keyboard", 5.55, "Keyboard description", new List<OrderProductModel>());
-        var prodThree = new ProductModel(Guid.NewGuid(), "Screen", 123.80, "Screen description", new List<OrderProductModel>());
+        var prodOne = new ProductModel("Mouse", 2.24, "Mouse description");
+        var prodTwo = new ProductModel("Keyboard", 5.55, "Keyboard description");
+        var prodThree = new ProductModel("Screen", 123.80, "Screen description");
 
         await _shopContext.Products.AddRangeAsync(prodOne, prodTwo, prodThree);
         await _shopContext.SaveChangesAsync();

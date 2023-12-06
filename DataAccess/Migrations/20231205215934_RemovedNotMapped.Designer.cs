@@ -4,16 +4,19 @@ using DataAccess.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace Server.Migrations
+namespace SOLIDDEMO.Migrations
 {
     [DbContext(typeof(ShopContext))]
-    partial class UserContextModelSnapshot : ModelSnapshot
+    [Migration("20231205215934_RemovedNotMapped")]
+    partial class RemovedNotMapped
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -50,7 +53,7 @@ namespace Server.Migrations
                     b.HasKey("CustomerId")
                         .HasName("PK_Customers");
 
-                    b.ToTable("Customers", (string)null);
+                    b.ToTable("Customers");
                 });
 
             modelBuilder.Entity("DataAccess.Models.CustomerOrderModel", b =>
@@ -72,7 +75,7 @@ namespace Server.Migrations
 
                     b.HasIndex("OrderId");
 
-                    b.ToTable("CustomerOrders", (string)null);
+                    b.ToTable("CustomerOrders");
                 });
 
             modelBuilder.Entity("DataAccess.Models.OrderModel", b =>
@@ -93,7 +96,7 @@ namespace Server.Migrations
                     b.HasKey("OrderId")
                         .HasName("PK_Orders");
 
-                    b.ToTable("Orders", (string)null);
+                    b.ToTable("Orders");
                 });
 
             modelBuilder.Entity("DataAccess.Models.ProductModel", b =>
@@ -117,7 +120,7 @@ namespace Server.Migrations
                     b.HasKey("ProductId")
                         .HasName("PK_Products");
 
-                    b.ToTable("Products", (string)null);
+                    b.ToTable("Products");
                 });
 
             modelBuilder.Entity("DataAccess.Models.CustomerOrderModel", b =>

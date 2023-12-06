@@ -4,19 +4,16 @@ namespace DataAccess.Models;
 
 public class OrderProductModel
 {
-    [Key]
-    public Guid OrderProductId { get; set; }
+    public Guid OrderProductId { get; init; }
 
-    public Guid OrderId { get; set; }
-    public OrderModel? Order { get; set; }
-
+    [Required]
     public Guid ProductId { get; set; }
-    public ProductModel? Product { get; set; }
+    public int Quantity { get; set; }
 
-
-    public OrderProductModel(Guid orderId, Guid productId)
+    public OrderProductModel(Guid productId, int quantity)
     {
-        OrderId = orderId;
+        OrderProductId = Guid.NewGuid();
         ProductId = productId;
+        Quantity = quantity;
     }
 }

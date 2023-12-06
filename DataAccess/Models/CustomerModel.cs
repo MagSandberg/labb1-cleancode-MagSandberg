@@ -6,7 +6,7 @@ namespace DataAccess.Models
     public class CustomerModel
     {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public Guid CustomerId { get; set; }
+        public Guid CustomerId { get; init; }
 
         [MaxLength(50), Required]
         public string FirstName { get; set; }
@@ -20,22 +20,14 @@ namespace DataAccess.Models
         [MinLength(8), MaxLength(50), Required]
         public string Password { get; set; }
 
-        public ICollection<OrderModel> Orders { get; set; }
 
-
-        public CustomerModel()
+        public CustomerModel(string firstName, string lastName, string email, string password)
         {
-            
-        }
-
-        public CustomerModel(Guid id, string firstName, string lastName, string email, string password, ICollection<OrderModel> orders)
-        {
-            CustomerId = id;
+            CustomerId = Guid.NewGuid();
             FirstName = firstName;
             LastName = lastName;
             Email = email;
             Password = password;
-            Orders = orders;
         }
     }
 }

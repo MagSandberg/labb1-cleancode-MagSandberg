@@ -4,16 +4,19 @@ using DataAccess.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace Server.Migrations
+namespace SOLIDDEMO.Migrations
 {
     [DbContext(typeof(ShopContext))]
-    partial class UserContextModelSnapshot : ModelSnapshot
+    [Migration("20231204194815_Auto generate ids")]
+    partial class Autogenerateids
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -50,12 +53,35 @@ namespace Server.Migrations
                     b.HasKey("CustomerId")
                         .HasName("PK_Customers");
 
-                    b.ToTable("Customers", (string)null);
+                    b.ToTable("Customers");
                 });
 
-            modelBuilder.Entity("DataAccess.Models.CustomerOrderModel", b =>
+            modelBuilder.Entity("DataAccess.Models.OrderModel", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<Guid>("OrderId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("CustomerId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("CustomerModelCustomerId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("ShippingDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("OrderId")
+                        .HasName("PK_Orders");
+
+                    b.HasIndex("CustomerModelCustomerId");
+
+                    b.ToTable("Orders");
+                });
+
+            modelBuilder.Entity("DataAccess.Models.OrderProductModel", b =>
+                {
+                    b.Property<Guid>("OrderProductId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
@@ -68,32 +94,13 @@ namespace Server.Migrations
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
 
-                    b.HasKey("Id");
+                    b.HasKey("OrderProductId");
 
                     b.HasIndex("OrderId");
 
-                    b.ToTable("CustomerOrders", (string)null);
-                });
+                    b.HasIndex("ProductId");
 
-            modelBuilder.Entity("DataAccess.Models.OrderModel", b =>
-                {
-                    b.Property<Guid>("OrderId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("CreationTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Guid>("CustomerId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("ShippingDate")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("OrderId")
-                        .HasName("PK_Orders");
-
-                    b.ToTable("Orders", (string)null);
+                    b.ToTable("OrderProducts");
                 });
 
             modelBuilder.Entity("DataAccess.Models.ProductModel", b =>
@@ -117,23 +124,48 @@ namespace Server.Migrations
                     b.HasKey("ProductId")
                         .HasName("PK_Products");
 
-                    b.ToTable("Products", (string)null);
-                });
-
-            modelBuilder.Entity("DataAccess.Models.CustomerOrderModel", b =>
-                {
-                    b.HasOne("DataAccess.Models.OrderModel", "Order")
-                        .WithMany("CustomerOrder")
-                        .HasForeignKey("OrderId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Order");
+                    b.ToTable("Products");
                 });
 
             modelBuilder.Entity("DataAccess.Models.OrderModel", b =>
                 {
-                    b.Navigation("CustomerOrder");
+                    b.HasOne("DataAccess.Models.CustomerModel", null)
+                        .WithMany("Orders")
+                        .HasForeignKey("CustomerModelCustomerId");
+                });
+
+            modelBuilder.Entity("DataAccess.Models.OrderProductModel", b =>
+                {
+                    b.HasOne("DataAccess.Models.OrderModel", "Order")
+                        .WithMany("OrderProducts")
+                        .HasForeignKey("OrderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("DataAccess.Models.ProductModel", "Product")
+                        .WithMany("OrderProducts")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Order");
+
+                    b.Navigation("Product");
+                });
+
+            modelBuilder.Entity("DataAccess.Models.CustomerModel", b =>
+                {
+                    b.Navigation("Orders");
+                });
+
+            modelBuilder.Entity("DataAccess.Models.OrderModel", b =>
+                {
+                    b.Navigation("OrderProducts");
+                });
+
+            modelBuilder.Entity("DataAccess.Models.ProductModel", b =>
+                {
+                    b.Navigation("OrderProducts");
                 });
 #pragma warning restore 612, 618
         }

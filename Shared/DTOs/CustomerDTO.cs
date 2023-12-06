@@ -4,7 +4,7 @@ namespace Shared.DTOs
 {
     public class CustomerDto
     {
-        public Guid Id { get; set; }
+        public Guid Id { get; init; }
 
         [Required]
         [StringLength(50, MinimumLength = 2, ErrorMessage = "Name is too long or short.")]
@@ -22,17 +22,15 @@ namespace Shared.DTOs
         [StringLength(50, MinimumLength = 8, ErrorMessage = "Password must be between 8-50 characters long.")]
         public string Password { get; set; }
 
-        public ICollection<OrderDto> Orders { get; set; }
 
 
-        public CustomerDto(Guid id, string firstName, string lastName, string email, string password, ICollection<OrderDto> orders)
+        public CustomerDto(string firstName, string lastName, string email, string password)
         {
-            Id = id;
+            Id = Guid.NewGuid();
             FirstName = firstName;
             LastName = lastName;
             Email = email;
             Password = password;
-            Orders = orders;
         }
     }
 }

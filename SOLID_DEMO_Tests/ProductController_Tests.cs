@@ -89,7 +89,7 @@ public class ProductController_Tests
         var sut = _productController;
 
         // Act
-        var result = await sut.AddProduct( new ProductDto(Guid.NewGuid(), "AddProduct", 100, "Product description", new List<OrderProductDto>()));
+        var result = await sut.AddProduct( new ProductDto("AddProduct", 100, "Product description"));
 
         // Assert
         Assert.IsType<OkObjectResult>(result);
@@ -106,8 +106,8 @@ public class ProductController_Tests
         // Arrange
         var sut = _productController;
 
-        var oldProduct = new ProductDto(Guid.NewGuid(), "Mouse", 100, "Product description", new List<OrderProductDto>());
-        var newProduct = new ProductDto(Guid.NewGuid(), "Mouse", 100, "Product description", new List<OrderProductDto>());
+        var oldProduct = new ProductDto("Mouse", 100, "Product description");
+        var newProduct = new ProductDto("Mouse", 100, "Product description");
 
         var addProduct = await sut.AddProduct(oldProduct);
         
@@ -132,7 +132,7 @@ public class ProductController_Tests
         var products = await _productRepository.GetProducts();
         var productId = products[0].Id;
 
-        var updatedProduct = new ProductDto(productId, "Updated Product", 100, "Product description", new List<OrderProductDto>());
+        var updatedProduct = new ProductDto("Updated Product", 100, "Product description");
 
         // Act
         var result = await sut.UpdateProduct(updatedProduct, productId);
@@ -147,7 +147,7 @@ public class ProductController_Tests
         // Arrange
         var sut = _productController;
 
-        var updatedProduct = new ProductDto(Guid.NewGuid(), "Updated Product", 100, "Product description", new List<OrderProductDto>());
+        var updatedProduct = new ProductDto("Updated Product", 100, "Product description");
 
         // Act
         var result = await sut.UpdateProduct(updatedProduct, Guid.NewGuid());
@@ -167,7 +167,7 @@ public class ProductController_Tests
         // Arrange
         var sut = _productController;
 
-        var newProduct = new ProductDto(Guid.NewGuid(), "New Product", 100, "Product description", new List<OrderProductDto>());
+        var newProduct = new ProductDto("New Product", 100, "Product description");
         await sut.AddProduct(newProduct);
 
         var productToDelete = await _productRepository.GetProduct(newProduct.Id);

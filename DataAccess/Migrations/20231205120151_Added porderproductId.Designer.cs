@@ -4,16 +4,19 @@ using DataAccess.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace Server.Migrations
+namespace SOLIDDEMO.Migrations
 {
     [DbContext(typeof(ShopContext))]
-    partial class UserContextModelSnapshot : ModelSnapshot
+    [Migration("20231205120151_Added porderproductId")]
+    partial class AddedporderproductId
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -50,29 +53,7 @@ namespace Server.Migrations
                     b.HasKey("CustomerId")
                         .HasName("PK_Customers");
 
-                    b.ToTable("Customers", (string)null);
-                });
-
-            modelBuilder.Entity("DataAccess.Models.CustomerOrderModel", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("OrderId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("ProductId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<int>("Quantity")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("OrderId");
-
-                    b.ToTable("CustomerOrders", (string)null);
+                    b.ToTable("Customers");
                 });
 
             modelBuilder.Entity("DataAccess.Models.OrderModel", b =>
@@ -93,7 +74,30 @@ namespace Server.Migrations
                     b.HasKey("OrderId")
                         .HasName("PK_Orders");
 
-                    b.ToTable("Orders", (string)null);
+                    b.ToTable("Orders");
+                });
+
+            modelBuilder.Entity("DataAccess.Models.OrderProductModel", b =>
+                {
+                    b.Property<Guid>("ProductId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("OrderModelOrderId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("OrderProductId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
+
+                    b.HasKey("ProductId")
+                        .HasName("PK_OrderProducts");
+
+                    b.HasIndex("OrderModelOrderId");
+
+                    b.ToTable("OrderProducts");
                 });
 
             modelBuilder.Entity("DataAccess.Models.ProductModel", b =>
@@ -117,23 +121,19 @@ namespace Server.Migrations
                     b.HasKey("ProductId")
                         .HasName("PK_Products");
 
-                    b.ToTable("Products", (string)null);
+                    b.ToTable("Products");
                 });
 
-            modelBuilder.Entity("DataAccess.Models.CustomerOrderModel", b =>
+            modelBuilder.Entity("DataAccess.Models.OrderProductModel", b =>
                 {
-                    b.HasOne("DataAccess.Models.OrderModel", "Order")
-                        .WithMany("CustomerOrder")
-                        .HasForeignKey("OrderId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Order");
+                    b.HasOne("DataAccess.Models.OrderModel", null)
+                        .WithMany("OrderProducts")
+                        .HasForeignKey("OrderModelOrderId");
                 });
 
             modelBuilder.Entity("DataAccess.Models.OrderModel", b =>
                 {
-                    b.Navigation("CustomerOrder");
+                    b.Navigation("OrderProducts");
                 });
 #pragma warning restore 612, 618
         }

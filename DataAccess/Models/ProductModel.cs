@@ -6,7 +6,7 @@ namespace DataAccess.Models;
 public class ProductModel
 {
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-    public Guid ProductId { get; set; }
+    public Guid ProductId { get; init; }
 
     [MaxLength(50), Required]
     public string Name { get; set; }
@@ -16,19 +16,12 @@ public class ProductModel
 
     public string Description { get; set; }
 
-    public ICollection<OrderProductModel> OrderProducts { get; set; }
 
-
-    public ProductModel()
+    public ProductModel(string name, double price, string description)
     {
-    }
-
-    public ProductModel(Guid productId, string name, double price, string description, ICollection<OrderProductModel> orderProducts)
-    {
-        ProductId = productId;
+        ProductId = Guid.NewGuid();
         Name = name;
         Price = price;
         Description = description;
-        OrderProducts = orderProducts;
     }
 }

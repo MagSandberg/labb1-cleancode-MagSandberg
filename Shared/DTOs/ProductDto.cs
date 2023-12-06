@@ -15,15 +15,12 @@ public class ProductDto
 
     public string Description { get; set; }
 
-    public ICollection<OrderProductDto> OrderProducts { get; set; }
 
-
-    public ProductDto(Guid id, string name, double price, string description, ICollection<OrderProductDto> orderProducts)
+    public ProductDto( string name, double price, string description)
     {
-        Id = id;
+        Id = Guid.NewGuid();
         Name = name;
         Price = price;
         Description = description;
-        OrderProducts = orderProducts;
     }
 }

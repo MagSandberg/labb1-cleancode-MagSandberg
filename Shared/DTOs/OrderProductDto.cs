@@ -1,17 +1,19 @@
-﻿
+﻿using System.ComponentModel.DataAnnotations;
+
 namespace Shared.DTOs;
 
 public class OrderProductDto
 {
-    public Guid OrderProductId { get; set; }
-    public Guid OrderId { get; set; }
+    public Guid OrderProductId { get; init; }
+
+    [Required]
     public Guid ProductId { get; set; }
+    public int Quantity { get; set; }
 
-
-    public OrderProductDto(Guid orderProductId, Guid orderId, Guid productId)
+    public OrderProductDto(Guid productId, int quantity)
     {
-        OrderProductId = orderProductId;
-        OrderId = orderId;
+        OrderProductId = Guid.NewGuid();
         ProductId = productId;
+        Quantity = quantity;
     }
 }

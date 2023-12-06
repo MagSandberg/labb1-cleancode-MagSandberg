@@ -16,11 +16,11 @@ public class ShopContext_With_CustomerInMemoryDbService
         await _shopContext.Database.EnsureDeletedAsync();
         await _shopContext.Database.EnsureCreatedAsync();
 
-        var customerOne = new CustomerModel(Guid.NewGuid(), "Ana", "Anason", "ana@ana.com", "123123123", new List<OrderModel>());
+        var customerOne = new CustomerModel("Firstname", "Lastname", "first@last.com", "123123123");
 
-        var customerTwo = new CustomerModel(Guid.NewGuid(), "Bnb", "Bnbson", "bnb@bnb.com", "123123123", new List<OrderModel>());
+        var customerTwo = new CustomerModel("Secondname", "Lastname", "second@last.com", "123123123");
 
-        var customerThree = new CustomerModel(Guid.NewGuid(), "Cnc", "Cncson", "cnc@cnc.com", "123123123", new List<OrderModel>());
+        var customerThree = new CustomerModel("Thirdname", "Lastname", "third@last.com", "123123123");
 
         await _shopContext.Customers.AddRangeAsync(customerOne, customerTwo, customerThree);
         await _shopContext.SaveChangesAsync();
