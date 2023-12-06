@@ -3,7 +3,7 @@ using Shared.DTOs;
 
 namespace DataAccess.Services.Mapping.Interfaces;
 
-public interface IOrderMapperProfile
+public interface IOrderMapper
 {
     public OrderModel MapToOrderModel(OrderDto dto);
     public OrderDto MapToOrderDto(OrderModel model);

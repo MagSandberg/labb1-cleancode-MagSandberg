@@ -16,20 +16,21 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
-builder.Services.AddScoped<ICustomerMapperProfile, CustomerMapperProfile>();
-builder.Services.AddScoped<IUnitOfWorkCustomer, UnitOfWorkCustomer>();
-
-builder.Services.AddScoped<IProductRepository, ProductRepository>();
-builder.Services.AddScoped<IProductMapperProfile, ProductMapperProfile>();
-builder.Services.AddScoped<IUnitOfWorkProduct, UnitOfWorkProduct>();
-
-builder.Services.AddScoped<IOrderRepository, OrderRepository>();
-builder.Services.AddScoped<IOrderMapperProfile, OrderMapperProfile>();
-builder.Services.AddScoped<IOrderProductMapperProfile, OrderProductMapperProfile>();
-builder.Services.AddScoped<IUnitOfWorkOrder, UnitOfWorkOrder>();
-
+//Mappers
+builder.Services.AddScoped<ICustomerMapper, CustomerMapper>();
+builder.Services.AddScoped<IProductMapper, ProductMapper>();
+builder.Services.AddScoped<IOrderMapper, OrderMapper>();
 builder.Services.AddScoped<ICustomerOrderMapper, CustomerOrderMapper>();
+
+//Repositories
+builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
+builder.Services.AddScoped<IProductRepository, ProductRepository>();
+builder.Services.AddScoped<IOrderRepository, OrderRepository>();
+
+//UnitOfWork
+builder.Services.AddScoped<IUnitOfWorkCustomer, UnitOfWorkCustomer>();
+builder.Services.AddScoped<IUnitOfWorkProduct, UnitOfWorkProduct>();
+builder.Services.AddScoped<IUnitOfWorkOrder, UnitOfWorkOrder>();
 
 builder.Services.AddDbContext<ShopContext>(options =>
 {

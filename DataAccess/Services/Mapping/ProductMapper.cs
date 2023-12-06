@@ -4,7 +4,7 @@ using Shared.DTOs;
 
 namespace DataAccess.Services.Mapping;
 
-public class ProductMapperProfile : IProductMapperProfile
+public class ProductMapper : IProductMapper
 {
     public ProductModel MapToProductModel(ProductDto dto)
     {

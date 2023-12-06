@@ -11,10 +11,10 @@ namespace DataAccess.UnitOfWork;
 public class UnitOfWorkOrder : IUnitOfWorkOrder
 {
     private readonly ShopContext _shopContext;
-    private readonly IOrderMapperProfile _orderMapper;
+    private readonly IOrderMapper _orderMapper;
     private readonly ICustomerOrderMapper _customerOrderMapper;
 
-    public UnitOfWorkOrder(ShopContext shopContext, IOrderMapperProfile orderMapper, ICustomerOrderMapper customerOrderMapper)
+    public UnitOfWorkOrder(ShopContext shopContext, IOrderMapper orderMapper, ICustomerOrderMapper customerOrderMapper)
     {
         _shopContext = shopContext;
         _orderMapper = orderMapper;
@@ -61,6 +61,8 @@ public class UnitOfWorkOrder : IUnitOfWorkOrder
     {
         var orderModel = new OrderModel(order.CustomerId, DateTime.UtcNow, DateTime.UtcNow.AddDays(3));
 
+        if (orderModel.CustomerId == Guid.Empty) return "Customer Id is empty.";
+
         foreach (var customerOrderDto in order.CustomerOrder)
         {
             var customerOrderModel = new CustomerOrderModel(customerOrderDto.ProductId, customerOrderDto.Quantity);
@@ -69,9 +71,9 @@ public class UnitOfWorkOrder : IUnitOfWorkOrder
         }
 
         await _shopContext.Orders.AddAsync(orderModel);
-        await _shopContext.SaveChangesAsync();
+        var result = await _shopContext.SaveChangesAsync();
 
-        return "Order added successfully.";
+        return result > 0 ? "Order added successfully." : "Failed to add order.";
     }
 
     public async Task<string> UpdateOrder(OrderDto order, Guid id)
@@ -84,7 +86,7 @@ public class UnitOfWorkOrder : IUnitOfWorkOrder
         orderExists.CustomerId = order.CustomerId;
         orderExists.ShippingDate = order.ShippingDate;
 
-        var products = new List<OrderProductModel>();
+        var products = new List<CustomerOrderModel>();
 
         //foreach (var orderProduct in order.OrderProducts)
         //{

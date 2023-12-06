@@ -8,10 +8,10 @@ namespace DataAccess.UnitOfWork;
 
 public class UnitOfWorkProduct : IUnitOfWorkProduct
 {
+    private readonly IProductMapper _productMapper;
     private readonly ShopContext _shopContext;
-    private readonly IProductMapperProfile _productMapper;
 
-    public UnitOfWorkProduct(ShopContext shopContext, IProductMapperProfile productMapper)
+    public UnitOfWorkProduct(ShopContext shopContext, IProductMapper productMapper)
     {
         _shopContext = shopContext;
         _productMapper = productMapper;
@@ -22,10 +22,7 @@ public class UnitOfWorkProduct : IUnitOfWorkProduct
     {
         var products = await _shopContext.Products.ToListAsync();
 
-        if (products.Count == 0)
-        {
-            return new List<ProductDto>();
-        }
+        if (products.Count == 0) return new List<ProductDto>();
 
         return products.Select(product => _productMapper.MapToProductDto(product)).ToList();
     }
@@ -34,10 +31,7 @@ public class UnitOfWorkProduct : IUnitOfWorkProduct
     {
         var product = await _shopContext.Products.FirstOrDefaultAsync(p => p.ProductId.Equals(id));
 
-        if (product == null)
-        {
-            return new ProductDto("Product does not exist.", 0, "");
-        }
+        if (product == null) return new ProductDto("Product does not exist.", 0, "");
 
         return _productMapper.MapToProductDto(product);
     }
@@ -56,7 +50,7 @@ public class UnitOfWorkProduct : IUnitOfWorkProduct
 
     public async Task<string> UpdateProduct(ProductDto product, Guid id)
     {
-        var productExists = await _shopContext.Products.FirstOrDefaultAsync(p => p.ProductId.Equals(product.Id));
+        var productExists = await _shopContext.Products.FirstOrDefaultAsync(p => p.ProductId.Equals(id));
         if (productExists is null) return "Product does not exist.";
 
         productExists.Name = product.Name;

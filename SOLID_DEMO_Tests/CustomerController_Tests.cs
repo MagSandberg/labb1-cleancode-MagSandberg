@@ -14,10 +14,10 @@ namespace SOLID_DEMO_Tests;
 
 public class CustomerController_Tests
 {
-    private static readonly ICustomerMapperProfile _customerMapperProfile = new CustomerMapperProfile();
+    private static readonly ICustomerMapper CustomerMapper = new CustomerMapper();
 
     private static readonly ShopContext_With_CustomerInMemoryDbService _customerInMemoryDbService = new ShopContext_With_CustomerInMemoryDbService();
-    private static readonly IUnitOfWorkCustomer _unitOfWork = new UnitOfWorkCustomer(_customerInMemoryDbService.CustomerInMemoryDb().Result, _customerMapperProfile);
+    private static readonly IUnitOfWorkCustomer _unitOfWork = new UnitOfWorkCustomer(_customerInMemoryDbService.CustomerInMemoryDb().Result, CustomerMapper);
 
     private static readonly ICustomerRepository _customerRepository = new CustomerRepository(_unitOfWork);
 

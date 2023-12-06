@@ -4,7 +4,7 @@ using Shared.DTOs;
 
 namespace DataAccess.Services.Mapping;
 
-public class CustomerMapperProfile : ICustomerMapperProfile
+public class CustomerMapper : ICustomerMapper
 {
     public CustomerModel MapToCustomerModel(CustomerDto dto)
     {

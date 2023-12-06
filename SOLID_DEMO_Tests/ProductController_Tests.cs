@@ -14,10 +14,10 @@ namespace SOLID_DEMO_Tests;
 
 public class ProductController_Tests
 {
-    private static readonly IProductMapperProfile ProductMapperProfile = new ProductMapperProfile();
+    private static readonly IProductMapper ProductMapper = new ProductMapper();
 
     private static readonly ShopContext_With_ProductInMemoryDbService _productInMemoryDbService = new ShopContext_With_ProductInMemoryDbService();
-    private static readonly IUnitOfWorkProduct _unitOfWork = new UnitOfWorkProduct(_productInMemoryDbService.ProductInMemoryDb().Result, ProductMapperProfile);
+    private static readonly IUnitOfWorkProduct _unitOfWork = new UnitOfWorkProduct(_productInMemoryDbService.ProductInMemoryDb().Result, ProductMapper);
 
     private static readonly IProductRepository _productRepository = new ProductRepository(_unitOfWork);
 
@@ -117,8 +117,8 @@ public class ProductController_Tests
         // Assert
         Assert.IsType<BadRequestObjectResult>(result);
 
-        var okObjectResult = (BadRequestObjectResult)result;
-        var value = okObjectResult.Value;
+        var badRequestObjectResult = (BadRequestObjectResult)result;
+        var value = badRequestObjectResult.Value;
 
         Assert.Equal("Product already exists.", value);
     }
